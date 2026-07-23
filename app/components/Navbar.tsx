@@ -93,7 +93,7 @@ export default function Navbar({
                 onShopClick();
               }}
             >
-              Shop
+              Features
             </a>
             <a
               href="#about-section"
@@ -120,43 +120,6 @@ export default function Navbar({
           {/* Desktop Right Actions */}
           <div className="hidden md:flex items-center gap-4">
             {/* Search Bar */}
-            <div className="relative flex items-center">
-              <AnimatePresence>
-                {isSearchExpanded && (
-                  <motion.input
-                    initial={{ width: 0, opacity: 0 }}
-                    animate={{ width: 200, opacity: 1 }}
-                    exit={{ width: 0, opacity: 0 }}
-                    transition={{ duration: 0.2 }}
-                    type="text"
-                    placeholder="Search premium sneakers..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="bg-slate-100 border-none rounded-full px-4 py-1.5 text-xs focus:ring-2 focus:ring-orange-500 outline-none mr-2 text-slate-800 font-sans"
-                  />
-                )}
-              </AnimatePresence>
-              <button
-                id="navbar-search-btn"
-                onClick={() => setIsSearchExpanded(!isSearchExpanded)}
-                className="p-2 rounded-full hover:bg-slate-100 text-slate-700 hover:text-orange-500 transition-all"
-                title="Search Products"
-              >
-                {isSearchExpanded && searchQuery ? (
-                  <X
-                    size={20}
-                    className="h-5 w-5"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setSearchQuery("");
-                      setIsSearchExpanded(false);
-                    }}
-                  />
-                ) : (
-                  <Search size={20} className="h-5 w-5" />
-                )}
-              </button>
-            </div>
 
             {/* Shopping Cart Trigger */}
             <button
