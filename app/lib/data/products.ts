@@ -1,4 +1,6 @@
+import { url } from "inspector";
 import { number } from "motion";
+import { describe } from "node:test";
 
 export interface ProductImage{
   id:string,
@@ -7,7 +9,7 @@ export interface ProductImage{
 export interface Product {
   id: string;
   name: string;
-  category: 'Running' | 'Formal' | 'Casual' | 'Basketball' | 'Training';
+  category: string,
   price: number;
   image: productImage[] ;
   colors: {id:string, hex:string}[];
@@ -22,6 +24,28 @@ export interface productImage {
   id:string,
   url:string,
 }
+
+interface Color{
+  name: string,
+  hex: string,
+}
+interface Size{
+  // id:number,
+  size:string,
+  stock: string,
+  // extra_price: string,
+  // sku: string,
+
+}
+interface ProductVariants{
+  color: Color,
+  images: Image[],
+  sizes: Size[],
+}
+interface Image{
+  image:string
+}
+
 interface Products
 {
             id: number,
@@ -29,75 +53,80 @@ interface Products
             name: string,
             category: string,
             price: string,
-            variants: ProductVariants[],
-            main_image: string,
             rating: string,
             review_count: number,
+            variants: ProductVariants[],
             description: string,
             badge: string,
             is_trending: boolean,
 }
 
-interface ProductVariants{
-  id: number,
-  product: number,
-  size: string,
-  color: string,
-  stock: number,
-  extra_price: number,
-}
-interface ProductImages{
-  id: number,
-  variant: number,
-  image: string,
-  alt_text: string,
-}
-export default async function fetchProducts(): Promise<Products[] | null>{
-const res  = await fetch("http://127.0.0.1:8000/api/products/")
+export async function fetchProducts(): Promise<Products[]>{
 try{
+const res  = await fetch("http://127.0.0.1:8000/api/products-details/")
   if(!res.ok){
   throw new Error(`failed to retrieve data ${res.status}`);
 }
 
-  const data: Products[] = await res.json()
+  const data: Products[] = await res.json();
 return data
 }catch(error){
   console.error("failed to retrieve data", error)
-  return null;
-}
-}
-export async function fetchProductImages(): Promise<ProductImages[] | null>{
-const res  = await fetch("http://127.0.0.1:8000/api/products-images/")
-try{
-  if(!res.ok){
-  throw new Error(`failed to retrieve data ${res.status}`);
-}
-
-  const data: ProductImages[] = await res.json()
-return data
-}catch(error){
-  console.error("failed to retrieve data", error)
-  return null;
+  return [];
 }
 }
 
 
-export const PRODUCTS: Product[] = [
-  {
-    id: "airforce_1",
-    name: "AirForce 1",
-    category: "Formal",
-    price: 450,
-    image: [{id:"white",url:"/images/a0.png"},{id:"black",url:"/images/a00.png"}],
-    rating: 4.9,
-    reviewsCount: 142,
-    colors: [{id:"white", hex:"#ffffff"}, {id:"black", hex:"#000000"}], // White, Black
-    sizes: [41, 42, 43, 44, 45],
-    description: "More than a sneaker, the Air Force 1 is a symbol of enduring style. This collection highlights its refined details, bold character, and the craftsmanship behind one of the world's most recognizable silhouettes.",
-    badge: "Best Seller",
-    isTrending: true
-  },
-];
+export function transformProducts(products: Products[]):Product[]{
+  return products.map((product)=>{
+    const colors = product.variants.map((v)=>({
+      id: v.color.name.toLocaleLowerCase(),
+      hex: v.color.hex
+    }))
+    const images = product.variants.flatMap((v)=>
+    v.images.map((i)=>({
+      id: v.color.name.toLowerCase(),
+      url: i.image,
+    })))
+    const uniqueSizes = new Set<number>();
+    product.variants.forEach((v)=>{
+      v.sizes.forEach((s)=>uniqueSizes.add(Number(s.size)))
+    })
+    const sizes = Array.from(uniqueSizes).sort((a, b)=> a-b);
+    return {
+    id: product.slug,
+    name: product.name,
+    category: product.category,
+    price: Number(product.price),
+    image: images,
+    colors: colors,
+    sizes: sizes,
+    rating: Number(product.rating),
+    reviewsCount: product.review_count,
+    description: product.description,
+    badge: product.badge,
+    isTrending: product.is_trending,
+  }
+  });
+}
+const rawProducts = await fetchProducts();
+export const PRODUCTS: Product[] = transformProducts(rawProducts);
+// export const PRODUCTS: Product[] = [
+//   {
+//     id: "airforce_1",
+//     name: "AirForce 1",
+//     category: "Formal",
+//     price: 450,
+//     rating: 4.9,
+//     reviewsCount: 142,
+//     image: [{id:"white",url:"/images/a0.png"},{id:"black",url:"/images/a00.png"}],
+//     colors: [{id:"white", hex:"#ffffff"}, {id:"black", hex:"#000000"}], // White, Black
+//     sizes: [41, 42, 43, 44, 45],
+//     description: "More than a sneaker, the Air Force 1 is a symbol of enduring style. This collection highlights its refined details, bold character, and the craftsmanship behind one of the world's most recognizable silhouettes.",
+//     badge: "Best Seller",
+//     isTrending: true
+//   },
+// ];
 export const BRANDS = [
   { name: "Running", count: 2 },
   { name: "Casual", count: 1 },
@@ -132,38 +161,6 @@ export const TESTIMONIALS = [
   }
 ];
 
-function transformProducts(products: Products[],
-  variants: ProductVariants[],
-  images: ProductImages[]){
-    return products.map((product)=>{
-      const productVariants = variants.filter((v)=> v.id === product.id)
-      const uniqueColors = [...new Set(productVariants.map((v)=>v.color))]
-      const uniqueSizes = [...new Set(productVariants.map((v)=>Number(v.size)))]
-      .filter((size)=>!isNaN(size))
-      .sort((a, b) => a - b);
 
-      const variantIds = productVariants.map((v)=> v.id);
-      const productImages = images.filter(
-      (img)=> variantIds.includes(img.variant));
-      const imageList = productImages.map((img)=>{
-      const relatedVariant = productVariants.find((v)=> v.id === img.variant);
-        
-        return{
-
-        }
-      })
-
-
-
-
-
-
-
-
-    })
-
-
-
-    }
 
 
