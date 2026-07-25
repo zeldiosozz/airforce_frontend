@@ -1,3 +1,5 @@
+import { number } from "motion";
+
 export interface ProductImage{
   id:string,
   url:string,
@@ -8,10 +10,10 @@ export interface Product {
   category: 'Running' | 'Formal' | 'Casual' | 'Basketball' | 'Training';
   price: number;
   image: productImage[] ;
-  rating: number;
-  reviewsCount: number;
   colors: {id:string, hex:string}[];
   sizes: number[];
+  rating: number;
+  reviewsCount: number;
   description: string;
   badge?: string;
   isTrending?: boolean;
@@ -20,6 +22,65 @@ export interface productImage {
   id:string,
   url:string,
 }
+interface Products
+{
+            id: number,
+            slug: string,
+            name: string,
+            category: string,
+            price: string,
+            variants: ProductVariants[],
+            main_image: string,
+            rating: string,
+            review_count: number,
+            description: string,
+            badge: string,
+            is_trending: boolean,
+}
+
+interface ProductVariants{
+  id: number,
+  product: number,
+  size: string,
+  color: string,
+  stock: number,
+  extra_price: number,
+}
+interface ProductImages{
+  id: number,
+  variant: number,
+  image: string,
+  alt_text: string,
+}
+export default async function fetchProducts(): Promise<Products[] | null>{
+const res  = await fetch("http://127.0.0.1:8000/api/products/")
+try{
+  if(!res.ok){
+  throw new Error(`failed to retrieve data ${res.status}`);
+}
+
+  const data: Products[] = await res.json()
+return data
+}catch(error){
+  console.error("failed to retrieve data", error)
+  return null;
+}
+}
+export async function fetchProductImages(): Promise<ProductImages[] | null>{
+const res  = await fetch("http://127.0.0.1:8000/api/products-images/")
+try{
+  if(!res.ok){
+  throw new Error(`failed to retrieve data ${res.status}`);
+}
+
+  const data: ProductImages[] = await res.json()
+return data
+}catch(error){
+  console.error("failed to retrieve data", error)
+  return null;
+}
+}
+
 
 export const PRODUCTS: Product[] = [
   {
@@ -70,3 +131,39 @@ export const TESTIMONIALS = [
     avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?fit=crop&w=150&h=150&q=80"
   }
 ];
+
+function transformProducts(products: Products[],
+  variants: ProductVariants[],
+  images: ProductImages[]){
+    return products.map((product)=>{
+      const productVariants = variants.filter((v)=> v.id === product.id)
+      const uniqueColors = [...new Set(productVariants.map((v)=>v.color))]
+      const uniqueSizes = [...new Set(productVariants.map((v)=>Number(v.size)))]
+      .filter((size)=>!isNaN(size))
+      .sort((a, b) => a - b);
+
+      const variantIds = productVariants.map((v)=> v.id);
+      const productImages = images.filter(
+      (img)=> variantIds.includes(img.variant));
+      const imageList = productImages.map((img)=>{
+      const relatedVariant = productVariants.find((v)=> v.id === img.variant);
+        
+        return{
+
+        }
+      })
+
+
+
+
+
+
+
+
+    })
+
+
+
+    }
+
+
