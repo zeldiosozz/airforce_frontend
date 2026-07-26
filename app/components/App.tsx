@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { Sparkles, SlidersHorizontal, ShoppingBag, Eye, HelpCircle } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 
@@ -16,104 +16,29 @@ import Testimonials from "@/app/components/Testimonials";
 import Newsletter from "@/app/components/Newsletter";
 import Footer from "@/app/components/Footer";
 import BSsection from "@/app/bigcomponents/BSsection";
+import { useLocalStorageCart } from "../hooks/useLocalStorageCart";
 import Image from "next/image";
 // Data
 import { Product, transformProducts } from "@/app/lib/data/products";
+import useCart from "@/app/hooks/useCart";
 interface AppProps{
   rawProducts: any[],
   rawTestimonials: any[],
 }
+
 export default function App({rawProducts, rawTestimonials}: AppProps) {
   const PRODUCTS = useMemo(() => transformProducts(rawProducts), [rawProducts]);
   // Global React States
-  const [cartItems, setCartItems] = useState<CartItem[]>([]);
-  const [isCartOpen, setIsCartOpen] = useState(false);
+  const {
+     cartItems,
+     isCartOpen,
+     setIsCartOpen,
+     handleAddToCart,
+     handleClearCart,
+     handleRemoveItem, 
+     handleUpdateQuantity} = useCart();  
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-  const [activeCategory, setActiveCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
-  const [sortBy, setSortBy] = useState("default"); // default, price-asc, price-desc, rating
-
-  // Memoized product counts per category for the CategoryStrip filter counters
-  const productCounts = useMemo(() => {
-    const counts: { [key: string]: number } = { All: PRODUCTS.length };
-    PRODUCTS.forEach((p) => {
-      counts[p.category] = (counts[p.category] || 0) + 1;
-    });
-    return counts;
-  }, []);
-
-  // Filter & Sort Pipeline
-  const filteredAndSortedProducts = useMemo(() => {
-    let result = [...PRODUCTS];
-
-    // 1. Filter by Category
-    if (activeCategory !== "All") {
-      result = result.filter((p) => p.category === activeCategory);
-    }
-
-    // 2. Filter by Search Query
-    if (searchQuery.trim()) {
-      const q = searchQuery.toLowerCase();
-      result = result.filter(
-        (p) =>
-          p.name.toLowerCase().includes(q) ||
-          p.category.toLowerCase().includes(q) ||
-          p.description.toLowerCase().includes(q)
-      );
-    }
-
-    // 3. Apply Sorting
-    if (sortBy === "price-asc") {
-      result.sort((a, b) => a.price - b.price);
-    } else if (sortBy === "price-desc") {
-      result.sort((a, b) => b.price - a.price);
-    } else if (sortBy === "rating") {
-      result.sort((a, b) => b.rating - a.rating);
-    }
-
-    return result;
-  }, [activeCategory, searchQuery, sortBy]);
-
-  // Cart Handlers
-const handleAddToCart = (product: Product, size: number, colorId: string) => {
-  const itemId = `${product.id}-${size}-${colorId.replace("#", "")}`;
-
-  setCartItems((prevItems) => {
-    const existingIdx = prevItems.findIndex((item) => item.id === itemId);
-    if (existingIdx > -1) {
-      return prevItems.map((item, idx) =>
-        idx === existingIdx
-          ? { ...item, quantity: item.quantity + 1 } // ✅ object جديد تمامًا
-          : item
-      );
-    } else {
-      return [...prevItems, { id: itemId, product, size, colorId, quantity: 1 }];
-    }
-  });
-
-  setIsCartOpen(true);
-};
-  const handleUpdateQuantity = (itemId: string, delta: number) => {
-    setCartItems((prevItems) =>
-      prevItems
-        .map((item) => {
-          if (item.id === itemId) {
-            const nextQty = item.quantity + delta;
-            return { ...item, quantity: nextQty };
-          }
-          return item;
-        })
-        .filter((item) => item.quantity > 0)
-    );
-  };
-
-  const handleRemoveItem = (itemId: string) => {
-    setCartItems((prevItems) => prevItems.filter((item) => item.id !== itemId));
-  };
-
-  const handleClearCart = () => {
-    setCartItems([]);
-  };
 
   // Scroll to anchor helpers
   const scrollToSection = (id: string) => {

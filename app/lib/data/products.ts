@@ -7,7 +7,8 @@ export interface ProductImage{
   url:string,
 }
 export interface Product {
-  id: string;
+  id: number;
+  slug: string;
   name: string;
   category: string,
   price: number;
@@ -101,7 +102,8 @@ export function transformProducts(products: Products[]):Product[]{
     })
     const sizes = Array.from(uniqueSizes).sort((a, b)=> a-b);
     return {
-    id: product.slug,
+    id: product.id,
+    slug: product.slug,
     name: product.name,
     category: product.category,
     price: Number(product.price),

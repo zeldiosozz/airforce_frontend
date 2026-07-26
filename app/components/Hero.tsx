@@ -21,7 +21,7 @@ export default function Hero({ onShopClick, onQuickAdd, PRODUCTS}: HeroProps) {
   const [selectedSize, setSelectedSize] = useState<number>(0);
   const [selectedColorId, setSelectedColorId] = useState<string>("white"); // orange, black, silver
   const [isLiked, setIsLiked] = useState<boolean>(false);
-  const product = PRODUCTS.find((p) => p.id === "air-force-1");
+  const product = PRODUCTS.find((p) => p.slug === "air-force-1");
 
   // const colorOptions = product?.colors ?? []
   const color = product?.colors.map((c)=>c.id) ?? []

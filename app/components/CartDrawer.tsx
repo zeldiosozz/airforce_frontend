@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { X, Trash2, ShoppingBag, CreditCard, ArrowRight, CheckCircle2, ShieldAlert } from "lucide-react";
 import { Product } from "@/app/lib/data/products";
+import { createOrder } from "@/app/lib/data/orders";
 import { motion, AnimatePresence } from "motion/react";
 import Image from "next/image";
 export interface CartItem {
@@ -35,7 +36,28 @@ export default function CartDrawer({
   const [address, setAddress] = useState("");
   const [googleMaps, setgoogleMaps] = useState("");
   const [phone, setPhone] = useState("");
+    const [mapsError, setMapsError] = useState("");  // ✅ حالة جديدة لرسالة الخطأ
 
+const isValidGoogleMapsLink = (value: string): boolean => {
+  const trimmed = value.trim();
+  
+  // تحقق من الصيغة العامة للرابط الأول
+  try {
+    const url = new URL(trimmed);
+    
+    // تحقق إن الدومين فعلاً بتاع جوجل ماب
+    const validDomains = [
+      "maps.google.com",
+      "www.google.com",
+      "goo.gl",
+      "maps.app.goo.gl",
+    ];
+    
+    return validDomains.some((domain) => url.hostname.includes(domain));
+  } catch {
+    return false;
+  }
+};
   if (!isOpen) return null;
 
   const subtotal = cartItems.reduce((acc, item) => acc + item.product.price * item.quantity, 0);
@@ -58,23 +80,45 @@ export default function CartDrawer({
       default: return "Custom";
     }
   };
+const handleCheckoutSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  setIsCheckingOut(true);
+   if (!isValidGoogleMapsLink(googleMaps)) {
+      setMapsError ("please enter valid google maps link .. for example: https://maps.app.goo.gl/...)");
+      return;
+    }
+    setMapsError(""); 
 
-  const handleCheckoutSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsCheckingOut(true);
+  try {
+    const payload = {
+      address,
+      google_maps_link: googleMaps,
+      phone,
+      items: cartItems.map((item) => ({
+        product_id: Number(item.product.id),
+        size: String(item.size),
+        color: item.colorId,
+        quantity: item.quantity,
+      })),
+    };
 
-    // Simulate payment process
+    await createOrder(payload);
+
+    setIsCheckingOut(false);
+    setIsSuccess(true);
+
     setTimeout(() => {
-      setIsCheckingOut(false);
-      setIsSuccess(true);
-      setTimeout(() => {
-        onClearCart();
-        setIsSuccess(false);
-        onClose();
-      }, 4000);
-    }, 2000);
-  };
+      onClearCart();
+      setIsSuccess(false);
+      onClose();
+    }, 4000);
 
+  } catch (error) {
+    console.error("Order failed:", error);
+    setIsCheckingOut(false);
+    alert("Order failed try again :(");
+  }
+};
   return (
     <div className="fixed inset-0 z-50 overflow-hidden">
       {/* Background overlay */}
