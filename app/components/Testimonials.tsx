@@ -1,10 +1,15 @@
 "use client";
 import React, { useState } from "react";
 import { Star, ChevronLeft, ChevronRight, Quote, Sparkles } from "lucide-react";
-import { TESTIMONIALS } from "@/app/lib/data/products";
+import { Testimonial } from "@/app/lib/data/products";
 import { motion, AnimatePresence } from "motion/react";
 import Image from "next/image";
-export default function Testimonials() {
+
+interface TestimonialsProps {
+  TESTIMONIALS: Testimonial[];
+}
+
+export default function Testimonials({TESTIMONIALS}: TestimonialsProps) {
   const [activeIndex, setActiveIndex] = useState(0);
 
   const handleNext = () => {

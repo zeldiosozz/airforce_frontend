@@ -60,7 +60,14 @@ interface Products
             badge: string,
             is_trending: boolean,
 }
-
+export interface Testimonial{
+  id: 1,  
+name: string,
+role: string,
+comment: string,
+rating: number,
+avatar: string,
+}
 export async function fetchProducts(): Promise<Products[]>{
 try{
 const res  = await fetch("http://127.0.0.1:8000/api/products-details/")
@@ -109,8 +116,8 @@ export function transformProducts(products: Products[]):Product[]{
   }
   });
 }
-const rawProducts = await fetchProducts();
-export const PRODUCTS: Product[] = transformProducts(rawProducts);
+// export const rawProducts = await fetchProducts();
+// export const PRODUCTS: Product[] = transformProducts(rawProducts);
 // export const PRODUCTS: Product[] = [
 //   {
 //     id: "airforce_1",
@@ -133,33 +140,53 @@ export const BRANDS = [
   { name: "Basketball", count: 1 },
   { name: "Training", count: 0 }
 ];
-
-export const TESTIMONIALS = [
-  {
-    id: 1,
-    name: "Rahul Krishnan",
-    role: "Marathon Runner, Kochi",
-    comment: "The Spike AeroX 1 is a game changer. I shaved 2 minutes off my half-marathon time. The carbon spike plate gives an incredible spring in every step, and the orange style stands out beautifully!",
-    rating: 5,
-    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?fit=crop&w=150&h=150&q=80"
-  },
-  {
-    id: 2,
-    name: "Aparna Nair",
-    role: "Fitness Coach, Trivandrum",
-    comment: "I wear the Spike Nitro Burn during long functional training sessions. The cushion supports my feet perfectly, and they hold up incredibly well under high impacts. True Kerala craftsmanship!",
-    rating: 5,
-    avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?fit=crop&w=150&h=150&q=80"
-  },
-  {
-    id: 3,
-    name: "John Mathews",
-    role: "Sneaker Enthusiast, Bangalore",
-    comment: "Absolutely love the Air Casual. Clean lines, gorgeous electric blue colorway, and supreme comfort. It goes with literally everything. The packaging was top notch, too!",
-    rating: 4.8,
-    avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?fit=crop&w=150&h=150&q=80"
+export async function fetchTestimonials():Promise<Testimonial[]>{
+  try{
+    const res = await fetch("http://127.0.0.1:8000/api/testimonials")
+    if(!res.ok){
+      throw new Error("failed to fetch testimonials data")
+    } 
+    const data = await res.json()
+    return data.map((d:any)=>({
+      id:d.id,
+      name: d.name,
+      role: d.role,
+      comment: d.comment,
+      rating: Number(d.rating) | 0,
+      avatar: d.avatar
+    }))
+  }catch(error){
+    console.error("failed to fetch testimonials data", error)
+    return []
   }
-];
+}
+// export const TESTIMONIALS = await fetchTestimonials();
+// export const TESTIMONIALS = [
+//   {
+//     id: 1,  
+//     name: "Rahul Krishnan",
+//     role: "Marathon Runner, Kochi",
+//     comment: "The Spike AeroX 1 is a game changer. I shaved 2 minutes off my half-marathon time. The carbon spike plate gives an incredible spring in every step, and the orange style stands out beautifully!",
+//     rating: 5,
+//     avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?fit=crop&w=150&h=150&q=80"
+//   },
+//   {
+//     id: 2,
+//     name: "Aparna Nair",
+//     role: "Fitness Coach, Trivandrum",
+//     comment: "I wear the Spike Nitro Burn during long functional training sessions. The cushion supports my feet perfectly, and they hold up incredibly well under high impacts. True Kerala craftsmanship!",
+//     rating: 5,
+//     avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?fit=crop&w=150&h=150&q=80"
+//   },
+//   {
+//     id: 3,
+//     name: "John Mathews",
+//     role: "Sneaker Enthusiast, Bangalore",
+//     comment: "Absolutely love the Air Casual. Clean lines, gorgeous electric blue colorway, and supreme comfort. It goes with literally everything. The packaging was top notch, too!",
+//     rating: 4.8,
+//     avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?fit=crop&w=150&h=150&q=80"
+//   }
+// ];
 
 
 

@@ -2,26 +2,38 @@
 import React, { useState } from "react";
 import { ArrowRight, Star, ShoppingCart, Sparkles, ShieldCheck, Heart } from "lucide-react";
 import { motion } from "framer-motion";
-import { PRODUCTS, Product } from "@/app/lib/data/products";
+import { Product } from "@/app/lib/data/products";
+import { fetchProducts, transformProducts } from "@/app/lib/data/products";
 import Image from "next/image";
 interface HeroProps {
   key?: React.Key;
   onShopClick: () => void;
   onQuickAdd: (product: Product, size: number, color: string) => void;
-}
+  PRODUCTS: Product[];
 
-export default function Hero({ onShopClick, onQuickAdd }: HeroProps) {
+}
+  //   const colorOptions = [
+  //    id: color, label: "airforce", code: color ? "black" : "bg-slate-900" , border: "border-slate-900" },
+  //    id: product?.colors.map((c)=>{c.id}), label: "airforce", code: "bg-slate-300", border: "border-slate-300" },
+  // ];
+
+export default function Hero({ onShopClick, onQuickAdd, PRODUCTS}: HeroProps) {
   const [selectedSize, setSelectedSize] = useState<number>(0);
   const [selectedColorId, setSelectedColorId] = useState<string>("white"); // orange, black, silver
   const [isLiked, setIsLiked] = useState<boolean>(false);
+  const product = PRODUCTS.find((p) => p.id === "air-force-1");
 
-  const colorOptions = [
-    { id: "black", label: "Carbon Stealth", code: "bg-slate-900", border: "border-slate-900" },
-    { id: "white", label: "Aero Platinum", code: "bg-slate-300", border: "border-slate-300" },
-  ];
+  // const colorOptions = product?.colors ?? []
+  const color = product?.colors.map((c)=>c.id) ?? []
 
+  const colorOptions = product?.colors.map((c)=>({
+    id: c.id,
+    label: "airforce",
+    code: c.id === "black"? "bg-slate-900" : "bg-slate-300" ,
+    border: c.id === "black" ? "border-slate-900" : "border-slate-300",
+  })) ?? []
+  const sizeOptions = product?.sizes ?? []
   const handleQuickAdd = () => {
-    const product = PRODUCTS.find((p) => p.id === "airforce_1");
     if(selectedSize == 0){alert("PLease select a size !!"); return;}
     if (product) {
       onQuickAdd(product, selectedSize, selectedColorId);
@@ -96,7 +108,7 @@ style={{ padding: "clamp(0.75rem, 2.5vw, 1.5rem)" }}            >
                   <span className="text-slate-400">Fits true to size</span>
                 </div>
                 <div className="flex gap-2 flex-wrap">
-                  {[41, 42, 43, 44, 45].map((size) => (
+                  {sizeOptions.map((size) => (
                     <button
                       key={size}
                       onClick={() => setSelectedSize(size)}
@@ -123,7 +135,7 @@ className={`rounded-lg text-xs font-semibold font-mono flex items-center justify
                       className={`w-6 h-6 rounded-full ${option.code} ring-offset-2 transition-all duration-300 ${
                         selectedColorId === option.id ? "ring-2 ring-orange-500 scale-110" : "opacity-80 hover:opacity-100"
                       }`}
-                      title={option.label}
+                      title={option.id}
                     />
                   ))}
                   <span className="text-xs font-medium text-slate-600 capitalize ml-1">

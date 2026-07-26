@@ -33,6 +33,7 @@ export default function CartDrawer({
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [address, setAddress] = useState("");
+  const [googleMaps, setgoogleMaps] = useState("");
   const [phone, setPhone] = useState("");
 
   if (!isOpen) return null;
@@ -163,8 +164,8 @@ export default function CartDrawer({
                       <textarea
                         required
                         placeholder=" "
-                        value={address}
-                        onChange={(e) => setAddress(e.target.value)}
+                        value={googleMaps}
+                        onChange={(e) => setgoogleMaps(e.target.value)}
                         className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm focus:ring-2 focus:ring-orange-500 outline-none min-h-[80px]"
                       />
                     </div>
