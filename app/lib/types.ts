@@ -51,7 +51,12 @@ export interface CartItem {
   selectedSize: number;
   quantity: number;
 }
-
+// export interface CartItem {
+//   id: string; // unique item id based on product + size + color
+//   product: Products;
+//   variant_size: VariantSize;
+//   quantity: number;
+// }
 export interface Testimonial {
   id: string;
   name: string;
@@ -59,4 +64,22 @@ export interface Testimonial {
   rating: number;
   comment: string;
   avatar: string;
+}
+export interface CartItem{
+  id: number,
+  product_name: string,
+  image: string,
+  color: string,
+  size: string,
+  quantity: number,
+  unit_price: string,
+  subtotal: string,
+
+}
+export interface Cart{
+  session_key: string,
+  total_items: number,
+  total_price: string, //decimal
+  items:CartItem[],
+
 }

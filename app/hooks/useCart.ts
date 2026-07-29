@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { useLocalStorageCart } from "./useLocalStorageCart";
-import { Product } from "../lib/data/products";
+import { Products, VariantSize } from "../lib/data/products";
 
 export default function useCart(){
 const [cartItems, setCartItems] = useLocalStorageCart();
 const [isCartOpen, setIsCartOpen] = useState(false);
-const handleAddToCart = (product: Product, size: number, colorId: string) => {
-const itemId = `${product.id}-${size}-${colorId.replace("#", "")}`;
+const handleAddToCart = (product: Products, variant_size: VariantSize) => {
+const itemId = `${product.id}-${variant_size}`;
       
         setCartItems((prevItems) => {
           const existingIdx = prevItems.findIndex((item) => item.id === itemId);
@@ -17,7 +17,7 @@ const itemId = `${product.id}-${size}-${colorId.replace("#", "")}`;
                 : item
             );
           } else {
-            return [...prevItems, { id: itemId, product, size, colorId, quantity: 1 }];
+            return [...prevItems, { id: itemId, product, variant_size, quantity: 1 }];
           }
         });
       

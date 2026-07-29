@@ -1,14 +1,14 @@
 "use client";
 import React, { useState } from "react";
 import { X, Star, ShoppingCart, Shield, Truck, RotateCcw, Heart } from "lucide-react";
-import { Product } from "@/app/lib/data/products";
+import { Products, VariantSize, ProductVariants } from "@/app/lib/data/products";
 import { motion } from "motion/react";
 import Image from "next/image";
 interface ProductDetailModalProps {
   key?: React.Key;
-  product: Product | null;
+  product: Products | null;
   onClose: () => void;
-  onAddToCart: (product: Product, size: number, color: string) => void;
+  onAddToCart: (product: Products, variant_size: VariantSize,) => void;
 }
 
 export default function ProductDetailModal({
@@ -18,14 +18,14 @@ export default function ProductDetailModal({
 }: ProductDetailModalProps) {
   if (!product) return null;
 
-  const [selectedSize, setSelectedSize] = useState<number>(product.sizes[2] || product.sizes[0]);
-  const [selectedColor, setSelectedColor] = useState<string>(product.colors[0]);
+  const [selectedSize, setSelectedSize] = useState<VariantSize>(product.variants[0].sizes[0]);
+  const [selectedVariant, setSelectedVariant] = useState<ProductVariants>(product.variants[0]);
   const [quantity, setQuantity] = useState<number>(1);
   const [isLiked, setIsLiked] = useState<boolean>(false);
 
   const handleAddToCart = () => {
     for (let i = 0; i < quantity; i++) {
-      onAddToCart(product, selectedSize, selectedColor);
+      onAddToCart(product, selectedSize);
     }
     onClose();
   };
@@ -85,13 +85,13 @@ export default function ProductDetailModal({
           {/* Dynamic Image Display with rotation/floating look */}
           <div className="relative z-10 max-w-[240px] sm:max-w-[320px] py-6 select-none">
             <Image
-              src={product.image}
+              src={product.variants[0].images[0].image}
               alt={product.name}
               fill
               className={`w-full h-auto drop-shadow-[0_20px_30px_rgba(0,0,0,0.15)] hover:rotate-6 transition-all duration-500 ${
-                selectedColor === "#000000" || selectedColor === "#1F2937"
+                selectedVariant.color.name === "#000000" || selectedVariant.color.name === "#1F2937"
                   ? "grayscale contrast-125 brightness-75"
-                  : selectedColor === "#9CA3AF" || selectedColor === "#F3F4F6"
+                  : selectedVariant.color.name === "#9CA3AF" || selectedVariant.color.name === "#F3F4F6"
                   ? "hue-rotate-180 saturate-50 brightness-110"
                   : ""
               }`}
@@ -129,7 +129,7 @@ export default function ProductDetailModal({
                   <Star size={12} className="fill-amber-400" />
                 </div>
                 <span className="font-mono text-xs font-bold text-slate-700">{product.rating}</span>
-                <span className="text-[10px] text-slate-400">({product.reviewsCount} reviews)</span>
+                <span className="text-[10px] text-slate-400">({product.review_count} reviews)</span>
               </div>
             </div>
 
@@ -140,7 +140,7 @@ export default function ProductDetailModal({
               </h3>
               <div className="flex items-baseline gap-2 mt-1">
                 <span className="font-mono text-2xl font-extrabold text-slate-900">
-                  ${product.price.toFixed(2)}
+                  ${Number(product.price).toFixed(2)}
                 </span>
                 <span className="text-xs text-slate-400">Includes all GST</span>
               </div>
@@ -154,22 +154,22 @@ export default function ProductDetailModal({
             {/* Color variant Selector */}
             <div className="space-y-2">
               <span className="text-xs font-semibold text-slate-700 block">
-                Select Color: <span className="text-slate-500 font-normal">{getColorName(selectedColor)}</span>
+                Select Color: <span className="text-slate-500 font-normal">{getColorName(selectedVariant.color.hex)}</span>
               </span>
               <div className="flex gap-2">
-                {product.colors.map((hex) => (
+                {product.variants.map((variant) => (
                   <button
-                    key={hex}
-                    onClick={() => setSelectedColor(hex)}
-                    style={{ backgroundColor: hex }}
+                    key={variant.color.hex}
+                    onClick={() => setSelectedVariant(variant)}
+                    style={{ backgroundColor: variant.color.hex }}
                     className={`w-8 h-8 rounded-full border-2 transition-all relative ${
-                      selectedColor === hex
+                      selectedVariant.color.hex === variant.color.hex
                         ? "border-orange-500 scale-110 shadow-sm"
                         : "border-transparent hover:scale-105"
                     }`}
-                    title={getColorName(hex)}
+                    title={getColorName(variant.color.hex)}
                   >
-                    {selectedColor === hex && (
+                    {selectedVariant.color.hex === variant.color.hex && (
                       <span className="absolute inset-0 flex items-center justify-center text-white text-xs font-bold font-sans">
                         ✓
                       </span>
@@ -188,17 +188,17 @@ export default function ProductDetailModal({
                 </a>
               </div>
               <div className="grid grid-cols-5 gap-2">
-                {product.sizes.map((size) => (
+                {selectedVariant.sizes.map((size) => (
                   <button
-                    key={size}
+                    key={size.id}
                     onClick={() => setSelectedSize(size)}
                     className={`h-10 rounded-xl text-xs font-semibold font-mono flex items-center justify-center border transition-all ${
-                      selectedSize === size
+                      selectedSize.id === size.id
                         ? "bg-slate-900 text-white border-slate-900 shadow-md"
                         : "bg-white hover:bg-slate-50 text-slate-700 border-slate-200"
                     }`}
                   >
-                    {size}
+                    {size.size}
                   </button>
                 ))}
               </div>
@@ -242,7 +242,7 @@ export default function ProductDetailModal({
               className="flex-1 bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3.5 px-6 rounded-2xl flex items-center justify-center gap-2 shadow-lg shadow-orange-500/20 hover:-translate-y-0.5 transition-all duration-200"
             >
               <ShoppingCart size={18} />
-              Add to Shopping Cart — ${(product.price * quantity).toFixed(2)}
+              Add to Shopping Cart — ${(Number(product.price) * quantity).toFixed(2)}
             </button>
           </div>
         </div>

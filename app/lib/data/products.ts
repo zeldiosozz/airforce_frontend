@@ -1,6 +1,7 @@
 import { url } from "inspector";
 import { number } from "motion";
 import { describe } from "node:test";
+import { name } from "typescipt";
 
 export interface ProductImage{
   id:string,
@@ -13,7 +14,7 @@ export interface Product {
   category: string,
   price: number;
   image: productImage[] ;
-  colors: {id:string, hex:string}[];
+  colors: {name:string, hex:string}[];
   sizes: number[];
   rating: number;
   reviewsCount: number;
@@ -27,27 +28,30 @@ export interface productImage {
 }
 
 interface Color{
+  id:number,
   name: string,
   hex: string,
 }
-interface Size{
-  // id:number,
+export interface VariantSize{
+  id:number,
+  variant_id:number,
   size:string,
   stock: string,
   // extra_price: string,
   // sku: string,
 
 }
-interface ProductVariants{
+export interface ProductVariants{
+  id: number,
   color: Color,
   images: Image[],
-  sizes: Size[],
+  sizes: VariantSize[],
 }
 interface Image{
   image:string
 }
 
-interface Products
+export interface Products
 {
             id: number,
             slug: string,
@@ -62,7 +66,7 @@ interface Products
             is_trending: boolean,
 }
 export interface Testimonial{
-  id: 1,  
+id: 1,  
 name: string,
 role: string,
 comment: string,
@@ -88,7 +92,7 @@ return data
 export function transformProducts(products: Products[]):Product[]{
   return products.map((product)=>{
     const colors = product.variants.map((v)=>({
-      id: v.color.name.toLocaleLowerCase(),
+      name: v.color.name.toLocaleLowerCase(),
       hex: v.color.hex
     }))
     const images = product.variants.flatMap((v)=>

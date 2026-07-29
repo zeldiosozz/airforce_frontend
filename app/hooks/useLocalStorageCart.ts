@@ -1,11 +1,11 @@
 // app/hooks/useLocalStorageCart.ts
 import { useState, useEffect } from "react";
-import type { CartItem } from "@/app/components/CartDrawer";
+import type { CartItemm } from "@/app/components/CartDrawer";
 
 const CART_STORAGE_KEY = "airforce_cart";
 
 export function useLocalStorageCart() {
-  const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [cartItems, setCartItems] = useState<CartItemm[]>([]);
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {

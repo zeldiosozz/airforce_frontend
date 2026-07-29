@@ -4,9 +4,9 @@ import App from "@/app/components/App";
 import Testimonials from "@/app/components/Testimonials";
 
 export default async function Page() {
-  const rawProducts = await fetchProducts();
+  const PRODUCTS = await fetchProducts();
   const TESTIMONIALS = await fetchTestimonials();
   return (<>
-<App rawProducts={rawProducts} rawTestimonials={TESTIMONIALS} />;
+<App PRODUCTS={PRODUCTS} rawTestimonials={TESTIMONIALS} />;
 </>)
 }

@@ -6,28 +6,24 @@ import { AnimatePresence, motion } from "motion/react";
 // Components
 import Navbar from "@/app/components/Navbar";
 import Hero from "@/app/components/Hero";
-import CategoryStrip from "@/app/components/CategoryStrip";
-import ProductCard from "@/app/components/ProductCard";
 import ProductDetailModal from "@/app/components/ProductDetailModal";
-import CartDrawer, { CartItem } from "@/app/components/CartDrawer";
+import CartDrawer from "@/app/components/CartDrawer";
+import { CartItem } from "@/app/lib/types";
 import BrandStory from "@/app/components/BrandStory";
-import FeaturesRow from "@/app/components/FeaturesRow";
 import Testimonials from "@/app/components/Testimonials";
 import Newsletter from "@/app/components/Newsletter";
 import Footer from "@/app/components/Footer";
 import BSsection from "@/app/bigcomponents/BSsection";
-import { useLocalStorageCart } from "../hooks/useLocalStorageCart";
-import Image from "next/image";
 // Data
-import { Product, transformProducts } from "@/app/lib/data/products";
+import { fetchProducts, Products, transformProducts } from "@/app/lib/data/products";
 import useCart from "@/app/hooks/useCart";
 interface AppProps{
-  rawProducts: any[],
+  PRODUCTS: Products[],
   rawTestimonials: any[],
 }
 
-export default function App({rawProducts, rawTestimonials}: AppProps) {
-  const PRODUCTS = useMemo(() => transformProducts(rawProducts), [rawProducts]);
+export default function App({PRODUCTS, rawTestimonials}: AppProps) {
+  // const PRODUCTS = useMemo(() => transformProducts(rawProducts), [rawProducts]);
   // Global React States
   const {
      cartItems,
@@ -37,7 +33,7 @@ export default function App({rawProducts, rawTestimonials}: AppProps) {
      handleClearCart,
      handleRemoveItem, 
      handleUpdateQuantity} = useCart();  
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [selectedProduct, setSelectedProduct] = useState<Products | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
 
   // Scroll to anchor helpers

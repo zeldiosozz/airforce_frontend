@@ -5,8 +5,7 @@ export interface OrderPayload {
   phone: string;
   items: {
     product_id: number;
-    size: string;
-    color: string;
+    variant_size: string;
     quantity: number;
   }[];
 }

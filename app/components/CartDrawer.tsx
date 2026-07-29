@@ -1,15 +1,15 @@
 "use client";
 import React, { useState } from "react";
 import { X, Trash2, ShoppingBag, CreditCard, ArrowRight, CheckCircle2, ShieldAlert } from "lucide-react";
-import { Product } from "@/app/lib/data/products";
+import { Products, VariantSize } from "@/app/lib/data/products";
 import { createOrder } from "@/app/lib/data/orders";
+import { CartItem } from "@/app/lib/types";
 import { motion, AnimatePresence } from "motion/react";
 import Image from "next/image";
-export interface CartItem {
+export interface CartItemm {
   id: string; // unique item id based on product + size + color
-  product: Product;
-  size: number;
-  colorId: string;
+  product: Products;
+  variant_size: VariantSize;
   quantity: number;
 }
 
@@ -60,7 +60,7 @@ const isValidGoogleMapsLink = (value: string): boolean => {
 };
   if (!isOpen) return null;
 
-  const subtotal = cartItems.reduce((acc, item) => acc + item.product.price * item.quantity, 0);
+  const subtotal = cartItems.reduce((acc, item) => acc + Number(item.product.price) * item.quantity, 0);
   const shippingFee : number = 80;
   const total = subtotal + shippingFee;
 
@@ -96,8 +96,7 @@ const handleCheckoutSubmit = async (e: React.FormEvent) => {
       phone,
       items: cartItems.map((item) => ({
         product_id: Number(item.product.id),
-        size: String(item.size),
-        color: item.colorId,
+        variant_size: item.size,
         quantity: item.quantity,
       })),
     };
@@ -292,13 +291,13 @@ const handleCheckoutSubmit = async (e: React.FormEvent) => {
                       {/* Product Thumbnail */}
                       <div className="w-20 h-20 bg-slate-50 rounded-xl flex items-center justify-center p-2 flex-shrink-0 relative overflow-hidden">
                         <Image
-                          src={item.product.image.find(img => img.id === item.colorId)?.url ?? item.product.image[0].url}
-                          alt={item.product.name}
+                          src={item.image}
+                          alt={item.product_name}
                           fill
                           className={`w-full h-auto object-contain transform group-hover:scale-110 transition-transform ${
-                            item.colorId === "#000000" || item.colorId === "#1F2937"
+                            item.color === "#000000" || item.color === "#1F2937"
                               ? "grayscale contrast-125 brightness-75"
-                              : item.colorId === "#9CA3AF" || item.colorId === "#F3F4F6"
+                              : item.color === "#9CA3AF" || item.color === "#F3F4F6"
                               ? "hue-rotate-180 saturate-50 brightness-110"
                               : ""
                           }`}
@@ -315,7 +314,7 @@ const handleCheckoutSubmit = async (e: React.FormEvent) => {
                             </h4>
                             <button
                               id={`cart-remove-btn-${item.id}`}
-                              onClick={() => onRemoveItem(item.id)}
+                              onClick={() => onRemoveItem(String(item.id))}
                               className="text-slate-300 hover:text-red-500 p-1 rounded transition-colors"
                               title="Delete Item"
                             >
@@ -323,14 +322,14 @@ const handleCheckoutSubmit = async (e: React.FormEvent) => {
                             </button>
                           </div>
                           <div className="flex items-center gap-3 mt-1.5 text-[10px] font-semibold text-slate-500 font-mono">
-                            <span>US Size: {item.size}</span>
+                            <span>US Size: {item.selectedSize}</span>
                             <span className="flex items-center gap-1">
                               Color:
                               <span
                                 className="w-2.5 h-2.5 rounded-full inline-block border border-slate-200"
-                                style={{ backgroundColor: item.colorId }}
+                                style={{ backgroundColor: item.color }}
                               />
-                              {getColorName(item.colorId)}
+                              {(item.color)}
                             </span>
                           </div>
                         </div>
@@ -339,7 +338,7 @@ const handleCheckoutSubmit = async (e: React.FormEvent) => {
                         <div className="flex justify-between items-center pt-2">
                           <div className="flex items-center border border-slate-200 rounded-lg overflow-hidden bg-white">
                             <button
-                              onClick={() => onUpdateQuantity(item.id, -1)}
+                              onClick={() => onUpdateQuantity(String(item.id), -1)}
                               className="w-6 h-6 flex items-center justify-center hover:bg-slate-100 text-slate-500 font-bold text-sm"
                             >
                               -
@@ -348,14 +347,14 @@ const handleCheckoutSubmit = async (e: React.FormEvent) => {
                               {item.quantity}
                             </span>
                             <button
-                              onClick={() => onUpdateQuantity(item.id, 1)}
+                              onClick={() => onUpdateQuantity(String(item.id), 1)}
                               className="w-6 h-6 flex items-center justify-center hover:bg-slate-100 text-slate-500 font-bold text-sm"
                             >
                               +
                             </button>
                           </div>
                           <span className="font-mono text-sm font-bold text-slate-800">
-                            {(item.product.price * item.quantity)}.LE
+                            {item.subtotal}.LE
                           </span>
                         </div>
                       </div>

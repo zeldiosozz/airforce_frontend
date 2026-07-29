@@ -2,41 +2,42 @@
 import React, { useState } from "react";
 import { ArrowRight, Star, ShoppingCart, Sparkles, ShieldCheck, Heart } from "lucide-react";
 import { motion } from "framer-motion";
-import { Product } from "@/app/lib/data/products";
+import { Products, ProductVariants, VariantSize} from "@/app/lib/data/products";
 import { fetchProducts, transformProducts } from "@/app/lib/data/products";
 import Image from "next/image";
 interface HeroProps {
   key?: React.Key;
   onShopClick: () => void;
-  onQuickAdd: (product: Product, size: number, color: string) => void;
-  PRODUCTS: Product[];
+  onQuickAdd: (product: Products, variant_size: VariantSize) => void;
+  PRODUCTS: Products[];
 
 }
-  //   const colorOptions = [
+  //   const colorvariants = [
   //    id: color, label: "airforce", code: color ? "black" : "bg-slate-900" , border: "border-slate-900" },
   //    id: product?.colors.map((c)=>{c.id}), label: "airforce", code: "bg-slate-300", border: "border-slate-300" },
   // ];
 
 export default function Hero({ onShopClick, onQuickAdd, PRODUCTS}: HeroProps) {
-  const [selectedSize, setSelectedSize] = useState<number>(0);
-  const [selectedColorId, setSelectedColorId] = useState<string>("white"); // orange, black, silver
+    const product = PRODUCTS.find((p) => p.slug === "air-force-1");
+
+  const [selectedVariant, setSelectedVariant] = useState<ProductVariants | null>(product?.variants[0] ?? null);
+  const [selectedSize, setSelectedSize] = useState<VariantSize | null>(null);
   const [isLiked, setIsLiked] = useState<boolean>(false);
-  const product = PRODUCTS.find((p) => p.slug === "air-force-1");
 
-  // const colorOptions = product?.colors ?? []
-  const color = product?.colors.map((c)=>c.id) ?? []
+  // const colorvariants = product?.colors ?? []
 
-  const colorOptions = product?.colors.map((c)=>({
-    id: c.id,
+  const colorvariants = product?.variants.map((c)=>({
+    id: c.color.name,
     label: "airforce",
-    code: c.id === "black"? "bg-slate-900" : "bg-slate-300" ,
-    border: c.id === "black" ? "border-slate-900" : "border-slate-300",
+    code: c.color.name === "black"? "bg-slate-900" : "bg-slate-300" ,
+    border: c.color.name === "black" ? "border-slate-900" : "border-slate-300",
   })) ?? []
-  const sizeOptions = product?.sizes ?? []
+  const sizevariants = product?.variants.map(v=>v.sizes) ?? []
   const handleQuickAdd = () => {
-    if(selectedSize == 0){alert("PLease select a size !!"); return;}
+    if(selectedVariant == null){alert("PLease select a size !!"); return;}
+    if(selectedSize == null){alert("PLease select a size !!"); return;}
     if (product) {
-      onQuickAdd(product, selectedSize, selectedColorId);
+      onQuickAdd(product, selectedSize);
     }
   };
 
@@ -108,9 +109,9 @@ style={{ padding: "clamp(0.75rem, 2.5vw, 1.5rem)" }}            >
                   <span className="text-slate-400">Fits true to size</span>
                 </div>
                 <div className="flex gap-2 flex-wrap">
-                  {sizeOptions.map((size) => (
+                  {selectedVariant?.sizes.map((size) => (
                     <button
-                      key={size}
+                      key={size.id}
                       onClick={() => setSelectedSize(size)}
 style={{ width: "clamp(1.75rem, 6vw, 2.5rem)", height: "clamp(1.75rem, 6vw, 2.5rem)" }}
 className={`rounded-lg text-xs font-semibold font-mono flex items-center justify-center transition-all ${                        selectedSize === size
@@ -118,7 +119,7 @@ className={`rounded-lg text-xs font-semibold font-mono flex items-center justify
                           : "bg-slate-50 hover:bg-slate-100 text-slate-700"
                       }`}
                     >
-                      {size}
+                      {size.size}
                     </button>
                   ))}
                 </div>
@@ -128,18 +129,18 @@ className={`rounded-lg text-xs font-semibold font-mono flex items-center justify
               <div className="space-y-2">
                 <span className="text-xs font-medium text-slate-500">Color Variant</span>
                 <div className="flex items-center gap-3">
-                  {colorOptions.map((option) => (
+                  {product?.variants.map((variant) => (
                     <button
-                      key={option.id}
-                      onClick={() => setSelectedColorId(option.id)}
-                      className={`w-6 h-6 rounded-full ${option.code} ring-offset-2 transition-all duration-300 ${
-                        selectedColorId === option.id ? "ring-2 ring-orange-500 scale-110" : "opacity-80 hover:opacity-100"
+                      key={variant.color.id}
+                      onClick={() => setSelectedVariant(variant)}
+                      className={`w-6 h-6 rounded-full ${variant.color.name == "black" ? "bg-slate-900" : "bg-slate-300"} ring-offset-2 transition-all duration-300 ${
+                        selectedVariant?.color.name === variant.color.name ? "ring-2 ring-orange-500 scale-110" : "opacity-80 hover:opacity-100"
                       }`}
-                      title={option.id}
+                      title={variant.color.name}
                     />
                   ))}
                   <span className="text-xs font-medium text-slate-600 capitalize ml-1">
-                    {colorOptions.find((o) => o.id === selectedColorId)?.label}
+                    {product?.name}
                   </span>
                 </div>
               </div>
@@ -205,14 +206,14 @@ className="relative w-full max-w-[400px] sm:max-w-[460px] cursor-pointer group" 
               {/* Dynamic Image Wrapper */}
               <div className="animate-shoe-float transition-all duration-500">
                 <Image
-                  src={selectedColorId=== "black" ?"/images/a00.png" : "/images/a0.png"}
+                  src={selectedVariant?.color.name === "black" ?"/images/a00.png" : "/images/a0.png"}
                   alt="Airforce 1"
                   width={460}
                   height={460}
                   className={`w-full h-auto drop-shadow-[0_25px_35px_rgba(249,115,22,0.35)] transition-all duration-700 ${
-                    selectedColorId === "black"
+                    selectedVariant?.color.name === "black"
                       ? "grayscale contrast-125 brightness-75"
-                      : selectedColorId === "silver"
+                      : selectedVariant?.color.name === "silver"
                       ? "hue-rotate-180 saturate-50 contrast-90 brightness-110"
                       : ""
                   }`}
