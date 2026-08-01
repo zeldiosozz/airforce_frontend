@@ -131,7 +131,7 @@ className={`rounded-lg text-xs font-semibold font-mono flex items-center justify
                 <div className="flex items-center gap-3">
                   {product?.variants.map((variant) => (
                     <button
-                      key={variant.color.id}
+                      key={variant.id}
                       onClick={() => setSelectedVariant(variant)}
                       className={`w-6 h-6 rounded-full ${variant.color.name == "black" ? "bg-slate-900" : "bg-slate-300"} ring-offset-2 transition-all duration-300 ${
                         selectedVariant?.color.name === variant.color.name ? "ring-2 ring-orange-500 scale-110" : "opacity-80 hover:opacity-100"
