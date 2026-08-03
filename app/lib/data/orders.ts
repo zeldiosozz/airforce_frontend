@@ -11,7 +11,7 @@ export interface OrderPayload {
 }
 
 export async function createOrder(payload: OrderPayload) {
-  const res = await fetch("http://127.0.0.1:8000/api/orders/", {
+  const res = await fetch(`${process.env.API_URL}/api/orders/`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload),

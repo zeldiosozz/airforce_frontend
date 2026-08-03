@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useLocalStorageCart } from "./useLocalStorageCart";
-import { Products, VariantSize } from "../lib/data/products";
+import { Products, VariantSize } from "../lib/types";
 
 export default function useCart(){
 const [cartItems, setCartItems] = useLocalStorageCart();

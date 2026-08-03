@@ -1,8 +1,14 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
- images: {
+  images: {
     remotePatterns: [
+      {
+        protocol: "http",
+        hostname: "localhost",
+        port: "8000",
+        pathname: "/**",
+      },
       {
         protocol: "http",
         hostname: "127.0.0.1",
@@ -10,6 +16,7 @@ const nextConfig: NextConfig = {
         pathname: "/**",
       },
     ],
-  },};
+  },
+};
 
 export default nextConfig;

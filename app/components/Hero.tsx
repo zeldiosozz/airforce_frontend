@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { ArrowRight, Star, ShoppingCart, Sparkles, ShieldCheck, Heart } from "lucide-react";
 import { motion } from "framer-motion";
-import { Products, ProductVariants, VariantSize} from "@/app/lib/data/products";
+import { Products, ProductVariants, VariantSize} from "@/app/lib/types";
 import { fetchProducts, transformProducts } from "@/app/lib/data/products";
 import Image from "next/image";
 interface HeroProps {
@@ -12,32 +12,19 @@ interface HeroProps {
   PRODUCTS: Products[];
 
 }
-  //   const colorvariants = [
-  //    id: color, label: "airforce", code: color ? "black" : "bg-slate-900" , border: "border-slate-900" },
-  //    id: product?.colors.map((c)=>{c.id}), label: "airforce", code: "bg-slate-300", border: "border-slate-300" },
-  // ];
 
 export default function Hero({ onShopClick, onQuickAdd, PRODUCTS}: HeroProps) {
-    const product = PRODUCTS.find((p) => p.slug === "air-force-1");
+  const product = PRODUCTS.find((p) => p.slug === "air-force-1");
 
   const [selectedVariant, setSelectedVariant] = useState<ProductVariants | null>(product?.variants[0] ?? null);
-  const [selectedSize, setSelectedSize] = useState<VariantSize | null>(null);
+  const [selectedVariantSize, setSelectedVariantSize] = useState<VariantSize | null>(null);
   const [isLiked, setIsLiked] = useState<boolean>(false);
 
-  // const colorvariants = product?.colors ?? []
-
-  const colorvariants = product?.variants.map((c)=>({
-    id: c.color.name,
-    label: "airforce",
-    code: c.color.name === "black"? "bg-slate-900" : "bg-slate-300" ,
-    border: c.color.name === "black" ? "border-slate-900" : "border-slate-300",
-  })) ?? []
-  const sizevariants = product?.variants.map(v=>v.sizes) ?? []
   const handleQuickAdd = () => {
-    if(selectedVariant == null){alert("PLease select a size !!"); return;}
-    if(selectedSize == null){alert("PLease select a size !!"); return;}
+    if(selectedVariant == null){alert("PLease select a color !!"); return;}
+    if(selectedVariantSize == null){alert("PLease select a size !!"); return;}
     if (product) {
-      onQuickAdd(product, selectedSize);
+      onQuickAdd(product, selectedVariantSize);
     }
   };
 
@@ -51,8 +38,10 @@ export default function Hero({ onShopClick, onQuickAdd, PRODUCTS}: HeroProps) {
       <div className="absolute bottom-10 right-10 w-96 h-96 bg-slate-100/60 rounded-full blur-3xl -z-10" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-<div className="grid grid-cols-12 gap-4 sm:gap-8 items-center">          {/* Hero Left Content Column */}
-<div className="col-span-6 z-10" style={{ gap: "clamp(0.75rem, 3vw, 2rem)", display: "flex", flexDirection: "column" }}>            {/* Tagline */}
+<div className="grid grid-cols-12 gap-4 sm:gap-8 items-center">          
+  {/* Hero Left Content Column */}
+<div className="col-span-6 z-10" style={{ gap: "clamp(0.75rem, 3vw, 2rem)", display: "flex", flexDirection: "column" }}>
+              {/* Tagline */}
             <motion.div
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
@@ -69,8 +58,8 @@ export default function Hero({ onShopClick, onQuickAdd, PRODUCTS}: HeroProps) {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.1 }}
-className="font-display font-bold text-slate-900 leading-[1.1] tracking-tight"
-style={{ fontSize: "clamp(1.5rem, 5vw, 3.75rem)" }}              >
+                className="font-display font-bold text-slate-900 leading-[1.1] tracking-tight"
+                style={{ fontSize: "clamp(1.5rem, 5vw, 3.75rem)" }}>
                 Step Into<br />
                 <span className="text-orange-500 relative">
                   Forcing Style
@@ -83,8 +72,8 @@ style={{ fontSize: "clamp(1.5rem, 5vw, 3.75rem)" }}              >
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.2 }}
-className="text-slate-600 max-w-xl font-sans font-light leading-relaxed"
-style={{ fontSize: "clamp(0.7rem, 1.8vw, 1.125rem)" }}              >
+                className="text-slate-600 max-w-xl font-sans font-light leading-relaxed"
+                style={{ fontSize: "clamp(0.7rem, 1.8vw, 1.125rem)" }}              >
                 Engineered for maximum velocity, styled for urban aesthetics. Inspired by minimalist design
                 with an energetic burst of high-performance sole plate technology. Handcrafted comfort with premium materials.
               </motion.p>
@@ -95,8 +84,8 @@ style={{ fontSize: "clamp(0.7rem, 1.8vw, 1.125rem)" }}              >
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
-className="bg-white rounded-2xl shadow-xl shadow-slate-100 border border-slate-100/80 max-w-md space-y-2 sm:space-y-4"
-style={{ padding: "clamp(0.75rem, 2.5vw, 1.5rem)" }}            >
+              className="bg-white rounded-2xl shadow-xl shadow-slate-100 border border-slate-100/80 max-w-md space-y-2 sm:space-y-4"
+              style={{ padding: "clamp(0.75rem, 2.5vw, 1.5rem)" }}            >
               <div className="flex justify-between items-center">
                 <span className="font-display font-semibold text-slate-900">AirForce</span>
                 <span className="font-mono text-lg font-bold text-orange-500">450 EGP</span>
@@ -112,9 +101,10 @@ style={{ padding: "clamp(0.75rem, 2.5vw, 1.5rem)" }}            >
                   {selectedVariant?.sizes.map((size) => (
                     <button
                       key={size.id}
-                      onClick={() => setSelectedSize(size)}
-style={{ width: "clamp(1.75rem, 6vw, 2.5rem)", height: "clamp(1.75rem, 6vw, 2.5rem)" }}
-className={`rounded-lg text-xs font-semibold font-mono flex items-center justify-center transition-all ${                        selectedSize === size
+                      onClick={() => setSelectedVariantSize(size)}
+                      style={{ width: "clamp(1.75rem, 6vw, 2.5rem)", height: "clamp(1.75rem, 6vw, 2.5rem)" }}
+                      className={`rounded-lg text-xs font-semibold font-mono flex items-center justify-center transition-all 
+                        ${selectedVariantSize === size
                           ? "bg-slate-900 text-white shadow-md shadow-slate-900/10"
                           : "bg-slate-50 hover:bg-slate-100 text-slate-700"
                       }`}
@@ -185,7 +175,8 @@ className={`rounded-lg text-xs font-semibold font-mono flex items-center justify
           </div>
 
           {/* Hero Right Visual Column */}
-<div className="col-span-6 flex items-center justify-center relative">            {/* Concentric Geometric Background Rings (Behance reference design elements) */}
+            <div className="col-span-6 flex items-center justify-center relative">            
+          {/* Concentric Geometric Background Rings (Behance reference design elements) */}
             <div className="absolute w-[320px] h-[320px] sm:w-[450px] sm:h-[450px] rounded-full border-2 border-dashed border-slate-100 flex items-center justify-center -z-10 animate-[spin_60s_linear_infinite]">
               <div className="w-[240px] h-[240px] sm:w-[350px] sm:h-[350px] rounded-full border border-orange-100 flex items-center justify-center">
                 <div className="w-[160px] h-[160px] sm:w-[250px] sm:h-[250px] rounded-full bg-gradient-to-br from-orange-100/40 to-orange-500/10" />
@@ -202,7 +193,7 @@ className={`rounded-lg text-xs font-semibold font-mono flex items-center justify
               initial={{ opacity: 0, scale: 0.8, rotate: -15 }}
               animate={{ opacity: 1, scale: 1, rotate: -12 }}
               transition={{ type: "spring", stiffness: 60, delay: 0.1 }}
-className="relative w-full max-w-[400px] sm:max-w-[460px] cursor-pointer group"            >
+              className="relative w-full max-w-[400px] sm:max-w-[460px] cursor-pointer group"            >
               {/* Dynamic Image Wrapper */}
               <div className="animate-shoe-float transition-all duration-500">
                 <Image
@@ -240,8 +231,8 @@ className="relative w-full max-w-[400px] sm:max-w-[460px] cursor-pointer group" 
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.6 }}
-className="absolute bottom-4 -right-2 sm:-right-8 bg-white/95 backdrop-blur-sm px-2 py-1.5 sm:px-4 sm:py-3 rounded-xl sm:rounded-2xl shadow-xl border border-slate-100 flex items-center gap-1.5 sm:gap-3 z-10"              >
-<div className="w-6 h-6 sm:w-10 sm:h-10 rounded-full bg-emerald-50 text-emerald-500 flex items-center justify-center font-bold font-sans text-[10px] sm:text-xs">                  4.9
+                className="absolute bottom-4 -right-2 sm:-right-8 bg-white/95 backdrop-blur-sm px-2 py-1.5 sm:px-4 sm:py-3 rounded-xl sm:rounded-2xl shadow-xl border border-slate-100 flex items-center gap-1.5 sm:gap-3 z-10"              >
+                <div className="w-6 h-6 sm:w-10 sm:h-10 rounded-full bg-emerald-50 text-emerald-500 flex items-center justify-center font-bold font-sans text-[10px] sm:text-xs">                  4.9
                 </div>
                 <div>
                   <div className="text-[8px] sm:text-[10px] text-slate-400 uppercase font-semibold font-sans">User Rating</div>
@@ -253,8 +244,8 @@ className="absolute bottom-4 -right-2 sm:-right-8 bg-white/95 backdrop-blur-sm p
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.7 }}
-className="absolute top-1/3 -left-2 sm:-left-8 bg-white/95 backdrop-blur-sm px-2 py-1.5 sm:px-4 sm:py-3 rounded-xl sm:rounded-2xl shadow-xl border border-slate-100 flex items-center gap-1.5 sm:gap-3 z-10"              >
-<div className="w-6 h-6 sm:w-9 sm:h-9 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center font-bold text-xs sm:text-base">⚡</div>
+                className="absolute top-1/3 -left-2 sm:-left-8 bg-white/95 backdrop-blur-sm px-2 py-1.5 sm:px-4 sm:py-3 rounded-xl sm:rounded-2xl shadow-xl border border-slate-100 flex items-center gap-1.5 sm:gap-3 z-10"              >
+                <div className="w-6 h-6 sm:w-9 sm:h-9 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center font-bold text-xs sm:text-base">⚡</div>
                 <div>
                   <div className="text-[8px] sm:text-[10px] text-slate-400 uppercase font-semibold font-sans">Tech Spec</div>
                   <div className="text-[10px] sm:text-xs font-bold text-slate-900 font-sans">Carbon Spring</div>

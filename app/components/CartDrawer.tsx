@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { X, Trash2, ShoppingBag, CreditCard, ArrowRight, CheckCircle2, ShieldAlert } from "lucide-react";
-import { Products, VariantSize } from "@/app/lib/data/products";
+import { Products, VariantSize } from "@/app/lib/types";
 import { createOrder } from "@/app/lib/data/orders";
 import { CartItem } from "@/app/lib/types";
 import { motion, AnimatePresence } from "motion/react";

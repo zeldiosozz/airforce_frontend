@@ -1,39 +1,64 @@
-// export interface Product {
-//   id: string;
-//   name: string;
-//   category: string;
-//   subCategory: string;
-//   price: number;
-//   originalPrice?: number;
-//   rating: number;
-//   reviewsCount: number;
-//   description: string;
-//   features: string[];
-//   image: string; // default image
-//   images: {
-//     [colorName: string]: string; // map color names to different images
-//   };
-//   colors: {
-//     name: string;
-//     class: string; // Tailwind bg class for swatch
-//     hex: string;
-//   }[];
-//   sizes: number[];
-//   isNew?: boolean;
-//   isSale?: boolean;
-// }
+export interface ProductImage{
+  id:string,
+  url:string,
+}
+
+export interface productImage {
+  id:string,
+  url:string,
+}
+
+interface Color{
+  id:number,
+  name: string,
+  hex: string,
+}
+export interface VariantSize{
+  id:number,
+  variant_id:number,
+  size:string,
+  stock: string,
+  // extra_price: string,
+  // sku: string,
+
+}
+export interface ProductVariants{
+  id: number,
+  color: Color,
+  images: Image[],
+  sizes: VariantSize[],
+}
+interface Image{
+  image:string
+}
+
+export interface Products
+{
+            id: number,
+            slug: string,
+            name: string,
+            category: string,
+            price: string,
+            rating: string,
+            review_count: number,
+            variants: ProductVariants[],
+            description: string,
+            badge: string,
+            is_trending: boolean,
+}
 export interface productImage {
   id:string,
   url:string,
 }
 
 export interface Product {
-  id: string;
+  id: number;
+  slug: string;
   name: string;
   category: string,
   price: number;
   image: productImage[] ;
-  colors: {id:string, hex:string}[];
+  colors: {name:string, hex:string}[];
   sizes: number[];
   rating: number;
   reviewsCount: number;
@@ -51,12 +76,6 @@ export interface CartItem {
   selectedSize: number;
   quantity: number;
 }
-// export interface CartItem {
-//   id: string; // unique item id based on product + size + color
-//   product: Products;
-//   variant_size: VariantSize;
-//   quantity: number;
-// }
 export interface Testimonial {
   id: string;
   name: string;

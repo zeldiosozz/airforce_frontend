@@ -2,80 +2,10 @@ import { url } from "inspector";
 import { number } from "motion";
 import { describe } from "node:test";
 import { name } from "typescipt";
-
-export interface ProductImage{
-  id:string,
-  url:string,
-}
-export interface Product {
-  id: number;
-  slug: string;
-  name: string;
-  category: string,
-  price: number;
-  image: productImage[] ;
-  colors: {name:string, hex:string}[];
-  sizes: number[];
-  rating: number;
-  reviewsCount: number;
-  description: string;
-  badge?: string;
-  isTrending?: boolean;
-}
-export interface productImage {
-  id:string,
-  url:string,
-}
-
-interface Color{
-  id:number,
-  name: string,
-  hex: string,
-}
-export interface VariantSize{
-  id:number,
-  variant_id:number,
-  size:string,
-  stock: string,
-  // extra_price: string,
-  // sku: string,
-
-}
-export interface ProductVariants{
-  id: number,
-  color: Color,
-  images: Image[],
-  sizes: VariantSize[],
-}
-interface Image{
-  image:string
-}
-
-export interface Products
-{
-            id: number,
-            slug: string,
-            name: string,
-            category: string,
-            price: string,
-            rating: string,
-            review_count: number,
-            variants: ProductVariants[],
-            description: string,
-            badge: string,
-            is_trending: boolean,
-}
-export interface Testimonial{
-id: 1,  
-name: string,
-role: string,
-comment: string,
-rating: number,
-avatar: string,
-}
+import { Product, Products, Testimonial } from "../types";
 export async function fetchProducts(): Promise<Products[]>{
 try{
-const res  = await fetch("http://127.0.0.1:8000/api/products-details/")
+const res  = await fetch(`${process.env.API_URL}/api/products-details/`)
   if(!res.ok){
   throw new Error(`failed to retrieve data ${res.status}`);
 }
@@ -148,7 +78,7 @@ export const BRANDS = [
 ];
 export async function fetchTestimonials():Promise<Testimonial[]>{
   try{
-    const res = await fetch("http://127.0.0.1:8000/api/testimonials")
+    const res = await fetch(`${process.env.API_URL}/api/testimonials`)
     if(!res.ok){
       throw new Error("failed to fetch testimonials data")
     } 

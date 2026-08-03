@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useLocalStorageCart } from "./useLocalStorageCart";
-import { Products, VariantSize } from "../lib/data/products";
+import { Products, VariantSize } from "../lib/types";
 import { Variant } from "motion";
 import { CartItem, Cart } from "../lib/types";
 

@@ -15,8 +15,10 @@ import Newsletter from "@/app/components/Newsletter";
 import Footer from "@/app/components/Footer";
 import BSsection from "@/app/bigcomponents/BSsection";
 // Data
-import { fetchProducts, Products, transformProducts } from "@/app/lib/data/products";
+import { fetchProducts, transformProducts } from "@/app/lib/data/products";
+import { Products } from "@/app/lib/types";
 import useCart from "@/app/hooks/useCart";
+
 interface AppProps{
   PRODUCTS: Products[],
   rawTestimonials: any[],

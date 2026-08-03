@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { Star, ChevronLeft, ChevronRight, Quote, Sparkles } from "lucide-react";
-import { Testimonial } from "@/app/lib/data/products";
+import { Testimonial } from "@/app/lib/types";
 import { motion, AnimatePresence } from "motion/react";
 import Image from "next/image";
 
