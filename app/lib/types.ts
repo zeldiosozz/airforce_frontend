@@ -1,3 +1,26 @@
+import {z} from "zod";
+
+export const CartItemSchema = z.object({
+  id: z.number(),
+  product_name: z.string(),
+  image: z.string(),
+  color: z.string(),
+  size: z.string(),
+  quantity: z.number(),
+  unit_price: z.string(),
+  subtotal: z.string(),
+});
+
+export const CartSchema = z.object({
+  session_key: z.string(),
+  total_items: z.number(),
+  total_price: z.string(),
+  items: z.array(CartItemSchema),
+});
+
+export type CartItem = z.infer<typeof CartItemSchema>;
+export type Cart = z.infer<typeof CartSchema>;
+
 export interface ProductImage{
   id:string,
   url:string,
@@ -66,16 +89,16 @@ export interface Product {
   badge?: string;
   isTrending?: boolean;
 }
-export interface CartItem {
-  product: Product;
-  selectedColor: {
-    name: string;
-    class: string;
-    hex: string;
-  };
-  selectedSize: number;
-  quantity: number;
-}
+// export interface CartItem {
+//   product: Product;
+//   selectedColor: {
+//     name: string;
+//     class: string;
+//     hex: string;
+//   };
+//   selectedSize: number;
+//   quantity: number;
+// }
 export interface Testimonial {
   id: string;
   name: string;
@@ -84,21 +107,4 @@ export interface Testimonial {
   comment: string;
   avatar: string;
 }
-export interface CartItem{
-  id: number,
-  product_name: string,
-  image: string,
-  color: string,
-  size: string,
-  quantity: number,
-  unit_price: string,
-  subtotal: string,
 
-}
-export interface Cart{
-  session_key: string,
-  total_items: number,
-  total_price: string, //decimal
-  items:CartItem[],
-
-}

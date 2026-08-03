@@ -2,71 +2,94 @@ import { useEffect, useState } from "react";
 import { useLocalStorageCart } from "./useLocalStorageCart";
 import { Products, VariantSize } from "../lib/types";
 import { Variant } from "motion";
-import { CartItem, Cart } from "../lib/types";
-
-export async function getCart(): Promise<Cart>{
-    try{
-    const res = await fetch("http://127.0.0.1:8000/cart/",{credentials:"include"})
-    if(!res.ok) throw new Error("failed to get Cart items data")
-        return res.json()
-}catch(error){
-    console.log("failed to get cart items data, ", error)
-    return( 
-        {
+import { CartSchema, Cart } from "../lib/types";
+const default_cart: Cart ={
             session_key:"", 
             total_items:0,
             total_price:"0", 
             items:[]
         }
-                )
+export async function getCart(): Promise<Cart>{
+    try{
+    const res = await fetch(`${process.env.API_URL}/cart/`,{credentials:"include"})
+    if(!res.ok) throw new Error("failed to get Cart items data")
+        return CartSchema.parse(await res.json());
+}catch(error){
+    console.log("failed to get cart items data, ", error)
+    return default_cart;
 }
 }
-export async function addToCart(variant_size:number, quantity:number):Promise<Cart>{
-    const res = await fetch("http://127.0.0.1:8000/cart/items", {
+export async function addToCart(variant_size:number):Promise<Cart>{
+    try{
+    const res = await fetch(`${process.env.API_URL}/cart/items/add/`, {
         method: "POST",
         headers: {"Content-Type":"application/json"},
         credentials: "include",
         body: JSON.stringify({
-            variant_size,
-            quantity
+            variant_size
         })
-
     },)
     if(!res.ok) throw new Error("failed to post cart items data to the cart")
-    return res.json()
+    return CartSchema.parse(await res.json()); 
+    }catch(error){
+        console.log("failed to add to cart items data, ", error)
+        return default_cart;
+    }
+
 
 }
-export async function updateCartItemAPI(itemId:number, delta:number):Promise<Cart>{
-    const res = await fetch(`http://127.0.0.1:8000/cart/items/${itemId}`, {
+export async function updateCartItemAPI(variant_size:number, action:string):Promise<Cart>{
+
+try{
+        const res = await fetch(`${process.env.API_URL}/cart/items/quantity/`, {
         method: "PATCH",
         headers: {"Content-Type":"application/json"},
         credentials: "include",
         body: JSON.stringify({
-            delta
+            variant_size,
+            action
         })
 
     },)
-    if(!res.ok) throw new Error("failed to post cart items data to the cart")
-    return res.json()
+    if(!res.ok) throw new Error("failed to update quantity cart items data to the cart")
+    return CartSchema.parse(await res.json()); 
 
+}catch(error){
+    console.log("failed to update quantity cart items data, ", error)
+    return default_cart;
 }
-export async function removeCartItemAPI(itemId:number):Promise<Cart>{
-    const res = await fetch(`http://127.0.0.1:8000/cart/items/${itemId}`, {
-        method: "DELETE",
+}
+
+export async function removeCartItemAPI(variant_size:number):Promise<Cart>{
+try{
+        const res = await fetch(`${process.env.API_URL}/cart/items/delete/`, {
+        method: "POST",
         credentials: "include",
+        body: JSON.stringify({
+            variant_size
+        })
     },)
     if(!res.ok) throw new Error("failed to post cart items data to the cart")
-    return res.json()
+    return CartSchema.parse(await res.json()); 
 
+}catch(error){
+    console.log("failed to remove cart items data, ", error)
+    return default_cart;
+}
 }
 export async function clearCartAPI():Promise<Cart>{
-    const res = await fetch("http://127.0.0.1:8000/cart/", {
+try{
+        const res = await fetch(`${process.env.API_URL}/cart/delete/`, {
         method: "DELETE",
         credentials: "include",
     },)
-    if(!res.ok) throw new Error("failed to post cart items data to the cart")
-    return res.json()
+    if(!res.ok) throw new Error(`${res.status}, failed to post cart items data to the cart`)
+    return CartSchema.parse(await res.json()); 
 
+}catch(error){
+    console.log("failed to clear cart items data, ", error)
+    return default_cart;
+}
 }
 
 export default function useCart(){
@@ -83,15 +106,18 @@ const [cart, setCart] = useState<Cart>({
         }
         loadCart()
     },[])
+
 const [isCartOpen, setIsCartOpen] = useState(false);
-const handleAddToCart = async (variant_size:VariantSize, quantity:number= 1) => {
-    const cart = await addToCart(variant_size.id, quantity);
+const handleAddToCart = async (variant_size:number) => {
+    const cart = await addToCart(variant_size);
         setCart(cart)
         setIsCartOpen(true);
       };
     
-const handleUpdateQuantity = async (itemId: number, delta: number) => {
-    const cart = await updateCartItemAPI(itemId, delta)
+const handleUpdateQuantity = async (itemId: number, action: string) => {
+    if (["increment", "decrement"].includes(action)) return;
+    const cart = await updateCartItemAPI(itemId, action);
+    if (cart.total_items === 0) setIsCartOpen(false);
     setCart(cart);
   };
 
