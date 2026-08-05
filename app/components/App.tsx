@@ -1,40 +1,38 @@
 "use client";
-import React, { useState, useMemo, useEffect } from "react";
-import { Sparkles, SlidersHorizontal, ShoppingBag, Eye, HelpCircle } from "lucide-react";
-import { AnimatePresence, motion } from "motion/react";
+import React, { useState} from "react";
+import { AnimatePresence } from "motion/react";
 
 // Components
 import Navbar from "@/app/components/Navbar";
 import Hero from "@/app/components/Hero";
-import ProductDetailModal from "@/app/components/ProductDetailModal";
 import CartDrawer from "@/app/components/CartDrawer";
-import { CartItem } from "@/app/lib/types";
 import BrandStory from "@/app/components/BrandStory";
 import Testimonials from "@/app/components/Testimonials";
 import Newsletter from "@/app/components/Newsletter";
 import Footer from "@/app/components/Footer";
 import BSsection from "@/app/bigcomponents/BSsection";
 // Data
-import { fetchProducts, transformProducts } from "@/app/lib/data/products";
-import { Products } from "@/app/lib/types";
-import useCart from "@/app/hooks/useCart";
+import { Products, Testimonial } from "@/app/lib/types";
+import useCart from "@/app/hooks/useCartt";
 
 interface AppProps{
   PRODUCTS: Products[],
-  rawTestimonials: any[],
+  TESTIMONIALS: Testimonial[],
 }
 
-export default function App({PRODUCTS, rawTestimonials}: AppProps) {
-  // const PRODUCTS = useMemo(() => transformProducts(rawProducts), [rawProducts]);
+export default function App({ PRODUCTS, TESTIMONIALS}: AppProps) {
   // Global React States
   const {
-     cartItems,
+     cart,
      isCartOpen,
      setIsCartOpen,
      handleAddToCart,
      handleClearCart,
      handleRemoveItem, 
-     handleUpdateQuantity} = useCart();  
+     handleUpdateQuantity,
+     updatingId,
+    } = useCart();  
+
   const [selectedProduct, setSelectedProduct] = useState<Products | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -52,7 +50,7 @@ export default function App({PRODUCTS, rawTestimonials}: AppProps) {
     <div className="min-h-screen bg-[#fafafa] flex flex-col font-sans antialiased text-slate-900 selection:bg-orange-500 selection:text-white">
       {/* Navigation Header */}
       <Navbar
-        cartItemsCount={cartItems.reduce((acc, item) => acc + item.quantity, 0)}
+        cartItemsCount={cart["items"].reduce((acc, item) => acc + item.quantity, 0)}
         onCartClick={() => setIsCartOpen(true)}
         onShopClick={() => scrollToSection("shop-section")}
         onAboutClick={() => scrollToSection("about-section")}
@@ -72,7 +70,7 @@ export default function App({PRODUCTS, rawTestimonials}: AppProps) {
       <BSsection />
       {/* Brand Heritage Section */}
       <BrandStory />
-            <section id="shop-section" className="py-20 bg-white border-b border-slate-100">
+      <section id="shop-section" className="py-20 bg-white border-b border-slate-100">
         
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
             <video
@@ -84,13 +82,13 @@ export default function App({PRODUCTS, rawTestimonials}: AppProps) {
             className="w-full h-auto rounded-xl shadow-lg"
           >
 
-            </video>
+        </video>
       </div>
       </section>
       {/* Features Row / USP Banner */}
 
       {/* Athlete Testimonials Review Slider */}
-      <Testimonials TESTIMONIALS={rawTestimonials}/>
+      <Testimonials TESTIMONIALS={TESTIMONIALS}/>
 
       {/* Newsletter signup Area */}
       <Newsletter />
@@ -102,28 +100,17 @@ export default function App({PRODUCTS, rawTestimonials}: AppProps) {
         onContactClick={() => scrollToSection("newsletter-section")}
       />
 
-      {/* Dialog Modals using framer-motion AnimatePresence */}
-      <AnimatePresence>
-        {selectedProduct && (
-          <ProductDetailModal
-            key="product-modal"
-            product={selectedProduct}
-            onClose={() => setSelectedProduct(null)}
-            onAddToCart={handleAddToCart}
-          />
-        )}
-      </AnimatePresence>
-
       <AnimatePresence>
         {isCartOpen && (
           <CartDrawer
             key="cart-drawer"
             isOpen={isCartOpen}
             onClose={() => setIsCartOpen(false)}
-            cartItems={cartItems}
+            cart={cart}
             onUpdateQuantity={handleUpdateQuantity}
             onRemoveItem={handleRemoveItem}
             onClearCart={handleClearCart}
+            updatingId={updatingId}
           />
         )}
       </AnimatePresence>

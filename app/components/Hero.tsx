@@ -8,7 +8,7 @@ import Image from "next/image";
 interface HeroProps {
   key?: React.Key;
   onShopClick: () => void;
-  onQuickAdd: (product: Products, variant_size: VariantSize) => void;
+  onQuickAdd: (variant_size: number) => void;
   PRODUCTS: Products[];
 
 }
@@ -24,7 +24,7 @@ export default function Hero({ onShopClick, onQuickAdd, PRODUCTS}: HeroProps) {
     if(selectedVariant == null){alert("PLease select a color !!"); return;}
     if(selectedVariantSize == null){alert("PLease select a size !!"); return;}
     if (product) {
-      onQuickAdd(product, selectedVariantSize);
+      onQuickAdd(product.variants.find((v) => v.id === selectedVariant.id)?.sizes.find((s) => s.id === selectedVariantSize.id)?.id ?? 0);
     }
   };
 

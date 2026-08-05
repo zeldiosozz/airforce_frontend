@@ -3,40 +3,37 @@ import React, { useState } from "react";
 import { X, Trash2, ShoppingBag, CreditCard, ArrowRight, CheckCircle2, ShieldAlert } from "lucide-react";
 import { Products, VariantSize } from "@/app/lib/types";
 import { createOrder } from "@/app/lib/data/orders";
-import { CartItem } from "@/app/lib/types";
+import { Cart } from "@/app/lib/types";
 import { motion, AnimatePresence } from "motion/react";
 import Image from "next/image";
-export interface CartItemm {
-  id: string; // unique item id based on product + size + color
-  product: Products;
-  variant_size: VariantSize;
-  quantity: number;
-}
 
 interface CartDrawerProps {
   key?: React.Key;
   isOpen: boolean;
   onClose: () => void;
-  cartItems: CartItem[];
-  onUpdateQuantity: (id: string, delta: number) => void;
-  onRemoveItem: (id: string) => void;
+  cart: Cart;
+  onUpdateQuantity: (id: number, action: string) => void;
+  onRemoveItem: (id: number) => void;
   onClearCart: () => void;
+  updatingId:number | null;
 }
 
 export default function CartDrawer({
   isOpen,
   onClose,
-  cartItems,
+  cart,
   onUpdateQuantity,
   onRemoveItem,
   onClearCart,
+  updatingId,
 }: CartDrawerProps) {
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
-  const [address, setAddress] = useState("");
-  const [googleMaps, setgoogleMaps] = useState("");
-  const [phone, setPhone] = useState("");
-    const [mapsError, setMapsError] = useState("");  // ✅ حالة جديدة لرسالة الخطأ
+  const [fullName, setFullName] = useState("")
+  const [address, setAddress] = useState("")
+  const [googleMapsLink, setgoogleMapsLink] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [mapsError, setMapsError] = useState("");  
 
 const isValidGoogleMapsLink = (value: string): boolean => {
   const trimmed = value.trim();
@@ -60,48 +57,25 @@ const isValidGoogleMapsLink = (value: string): boolean => {
 };
   if (!isOpen) return null;
 
-  const subtotal = cartItems.reduce((acc, item) => acc + Number(item.product.price) * item.quantity, 0);
-  const shippingFee : number = 80;
-  const total = subtotal + shippingFee;
 
-  // Color name dictionary
-  const getColorName = (hex: string) => {
-    switch (hex.toUpperCase()) {
-      case "#EA580C": return "Orange";
-      case "#000000": return "Black";
-      case "#9CA3AF": return "Gray";
-      case "#DC2626": return "Red";
-      case "#1F2937": return "Dark Gray";
-      case "#FFFFFF": return "White";
-      case "#2563EB": return "Blue";
-      case "#F3F4F6": return "Soft Gray";
-      case "#22C55E": return "Neon Green";
-      case "#4B5563": return "Slate";
-      default: return "Custom";
-    }
-  };
+
 const handleCheckoutSubmit = async (e: React.FormEvent) => {
   e.preventDefault();
   setIsCheckingOut(true);
-   if (!isValidGoogleMapsLink(googleMaps)) {
+   if (!isValidGoogleMapsLink(googleMapsLink)) {
       setMapsError ("please enter valid google maps link .. for example: https://maps.app.goo.gl/...)");
       return;
     }
     setMapsError(""); 
 
   try {
-    const payload = {
-      address,
-      google_maps_link: googleMaps,
-      phone,
-      items: cartItems.map((item) => ({
-        product_id: Number(item.product.id),
-        variant_size: item.size,
-        quantity: item.quantity,
-      })),
-    };
 
-    await createOrder(payload);
+    await createOrder({
+      full_name: fullName,
+      address,
+      google_maps_link: googleMapsLink,
+      phone_number: phoneNumber,
+    });
 
     setIsCheckingOut(false);
     setIsSuccess(true);
@@ -144,7 +118,7 @@ const handleCheckoutSubmit = async (e: React.FormEvent) => {
               <ShoppingBag className="text-orange-500" size={20} />
               <h2 className="font-display font-bold text-lg text-slate-900">Your Shopping Bag</h2>
               <span className="bg-slate-100 text-slate-600 font-mono text-xs font-semibold px-2 py-0.5 rounded-full">
-                {cartItems.reduce((acc, item) => acc + item.quantity, 0)}
+                {cart.total_items}
               </span>
             </div>
             <button
@@ -176,7 +150,7 @@ const handleCheckoutSubmit = async (e: React.FormEvent) => {
                   <div className="bg-slate-50 p-4 rounded-xl border border-slate-100 w-full text-xs text-left space-y-1 font-mono">
                     <div className="text-slate-400 uppercase text-[9px] font-bold">Shipping Info</div>
                     <div className="text-slate-700 font-semibold truncate">Address: {address || "Express Delivery"}</div>
-                    <div className="text-slate-700 font-semibold">Contact: {phone || "Verified Customer"}</div>
+                    <div className="text-slate-700 font-semibold">Contact: {phoneNumber || "Verified Customer"}</div>
                     <div className="text-slate-700 font-semibold">Delivery Time: 48-72 Hours</div>
                   </div>
                   <span className="text-xs text-orange-500 animate-pulse font-medium">Auto-closing shopping bag...</span>
@@ -193,6 +167,16 @@ const handleCheckoutSubmit = async (e: React.FormEvent) => {
                   </h3>
                   <form onSubmit={handleCheckoutSubmit} className="space-y-4">
                     <div className="space-y-1">
+                      <label className="text-xs font-semibold text-slate-600 block">Name</label>
+                      <input
+                        required
+                        placeholder="your name .. "
+                        value={fullName}
+                        onChange={(e) => setFullName(e.target.value)}
+                        className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm focus:ring-2 focus:ring-orange-500 outline-none min-h-[5px]"
+                      />
+                    </div>
+                    <div className="space-y-1">
                       <label className="text-xs font-semibold text-slate-600 block">Deliver to Address</label>
                       <textarea
                         required
@@ -207,8 +191,8 @@ const handleCheckoutSubmit = async (e: React.FormEvent) => {
                       <textarea
                         required
                         placeholder=" "
-                        value={googleMaps}
-                        onChange={(e) => setgoogleMaps(e.target.value)}
+                        value={googleMapsLink}
+                        onChange={(e) => setgoogleMapsLink(e.target.value)}
                         className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm focus:ring-2 focus:ring-orange-500 outline-none min-h-[80px]"
                       />
                     </div>
@@ -219,8 +203,8 @@ const handleCheckoutSubmit = async (e: React.FormEvent) => {
                         type="tel"
                         required
                         placeholder="+20 00000 00000"
-                        value={phone}
-                        onChange={(e) => setPhone(e.target.value)}
+                        value={phoneNumber}
+                        onChange={(e) => setPhoneNumber(e.target.value)}
                         className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-orange-500 outline-none"
                       />
                     </div>
@@ -238,7 +222,7 @@ const handleCheckoutSubmit = async (e: React.FormEvent) => {
                       id="checkout-confirm-btn"
                       className="w-full bg-slate-900 hover:bg-orange-500 text-white py-3.5 px-4 rounded-xl font-display font-semibold flex items-center justify-center gap-2 shadow-lg hover:shadow-orange-500/20 hover:-translate-y-0.5 transition-all"
                     >
-                      <span>Complete Simulated Purchase — {total}.LE</span>
+                      <span>Complete Simulated Purchase — {cart.total_price}.LE</span>
                       <ArrowRight size={18} />
                     </button>
 
@@ -252,7 +236,7 @@ const handleCheckoutSubmit = async (e: React.FormEvent) => {
                     </button>
                   </form>
                 </motion.div>
-              ) : cartItems.length === 0 ? (
+              ) : cart.total_items === 0 ? (
                 /* Empty bag screen */
                 <motion.div
                   initial={{ opacity: 0 }}
@@ -279,7 +263,7 @@ const handleCheckoutSubmit = async (e: React.FormEvent) => {
               ) : (
                 /* Items List */
                 <div className="space-y-4">
-                  {cartItems.map((item) => (
+                  {cart.items.map((item) => (
                     <motion.div
                       key={item.id}
                       layout
@@ -291,7 +275,7 @@ const handleCheckoutSubmit = async (e: React.FormEvent) => {
                       {/* Product Thumbnail */}
                       <div className="w-20 h-20 bg-slate-50 rounded-xl flex items-center justify-center p-2 flex-shrink-0 relative overflow-hidden">
                         <Image
-                          src={item.image}
+                          src={`/api/image${item.image}`}
                           alt={item.product_name}
                           fill
                           className={`w-full h-auto object-contain transform group-hover:scale-110 transition-transform ${
@@ -310,11 +294,11 @@ const handleCheckoutSubmit = async (e: React.FormEvent) => {
                         <div>
                           <div className="flex justify-between items-start">
                             <h4 className="font-display font-semibold text-sm text-slate-900 line-clamp-1">
-                              {item.product.name}
+                              {item.product_name}
                             </h4>
                             <button
                               id={`cart-remove-btn-${item.id}`}
-                              onClick={() => onRemoveItem(String(item.id))}
+                              onClick={() => onRemoveItem(item.id)}
                               className="text-slate-300 hover:text-red-500 p-1 rounded transition-colors"
                               title="Delete Item"
                             >
@@ -322,7 +306,7 @@ const handleCheckoutSubmit = async (e: React.FormEvent) => {
                             </button>
                           </div>
                           <div className="flex items-center gap-3 mt-1.5 text-[10px] font-semibold text-slate-500 font-mono">
-                            <span>US Size: {item.selectedSize}</span>
+                            <span>US Size: {item.size}</span>
                             <span className="flex items-center gap-1">
                               Color:
                               <span
@@ -338,7 +322,8 @@ const handleCheckoutSubmit = async (e: React.FormEvent) => {
                         <div className="flex justify-between items-center pt-2">
                           <div className="flex items-center border border-slate-200 rounded-lg overflow-hidden bg-white">
                             <button
-                              onClick={() => onUpdateQuantity(String(item.id), -1)}
+                              disabled={item.id === updatingId}
+                              onClick={() => onUpdateQuantity(item.id, "decrement")}
                               className="w-6 h-6 flex items-center justify-center hover:bg-slate-100 text-slate-500 font-bold text-sm"
                             >
                               -
@@ -347,7 +332,8 @@ const handleCheckoutSubmit = async (e: React.FormEvent) => {
                               {item.quantity}
                             </span>
                             <button
-                              onClick={() => onUpdateQuantity(String(item.id), 1)}
+                              disabled={item.id === updatingId}
+                              onClick={() => onUpdateQuantity(item.id, "increment")}
                               className="w-6 h-6 flex items-center justify-center hover:bg-slate-100 text-slate-500 font-bold text-sm"
                             >
                               +
@@ -366,23 +352,23 @@ const handleCheckoutSubmit = async (e: React.FormEvent) => {
           </div>
 
           {/* Footer - Checkout panel */}
-          {!isSuccess && cartItems.length > 0 && (
+          {!isSuccess && cart.total_items > 0 && (
             <div className="border-t border-slate-100 px-6 py-6 space-y-4 bg-slate-50/50">
               {/* Cost Calculations */}
               <div className="space-y-1.5 text-sm font-sans">
                 <div className="flex justify-between text-slate-500">
                   <span>Bag Subtotal</span>
-                  <span className="font-mono">{subtotal}.LE</span>
+                  <span className="font-mono">{Number(cart.total_price) - Number(cart.shipping_fee)}.LE</span>
                 </div>
                 <div className="flex justify-between text-slate-500">
                   <span>Express Shipping</span>
                   <span className="font-mono">
-                    {shippingFee === 0 ? <span className="text-emerald-500">Free</span> : `${shippingFee}.LE`}
+                    {Number(cart.shipping_fee) === 0 ? <span className="text-emerald-500">Free</span> : `${cart.shipping_fee}.LE`}
                   </span>
                 </div>
                 <div className="flex justify-between text-slate-900 font-bold pt-1 border-t border-slate-100 text-base">
                   <span>Total Due</span>
-                  <span className="font-mono text-orange-500">{total}.LE</span>
+                  <span className="font-mono text-orange-500">{cart.total_price}.LE</span>
                 </div>
               </div>
 

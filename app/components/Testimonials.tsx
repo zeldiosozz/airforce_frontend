@@ -21,7 +21,6 @@ export default function Testimonials({TESTIMONIALS}: TestimonialsProps) {
   };
 
   const current = TESTIMONIALS[activeIndex];
-
   return (
     <section className="py-20 bg-slate-50 border-b border-slate-100">
       <div className="max-w-4xl mx-auto px-4 sm:px-6">

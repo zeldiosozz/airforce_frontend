@@ -1,26 +1,22 @@
 // app/lib/data/orders.ts
-export interface OrderPayload {
-  address: string;
-  google_maps_link: string;
-  phone: string;
-  items: {
-    product_id: number;
-    variant_size: string;
-    quantity: number;
-  }[];
-}
+import { payload } from "@/app/lib/types";
 
-export async function createOrder(payload: OrderPayload) {
-  const res = await fetch(`${process.env.API_URL}/api/orders/`, {
+export async function createOrder(payload: payload) {
+  console.log(payload)
+try{
+    const res = await fetch(`/api/checkout/`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
+    credentials:"include",
     body: JSON.stringify(payload),
   });
 
   if (!res.ok) {
-    const errorData = await res.json();
-    throw new Error(JSON.stringify(errorData));
+    throw new Error(res.statusText);
   }
+    return await res.json();
 
-  return await res.json();
+}catch(error){
+    console.error("Error creating order:", error);
+}
 }
