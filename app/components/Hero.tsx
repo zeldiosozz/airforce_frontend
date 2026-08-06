@@ -1,25 +1,28 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect} from "react";
 import { ArrowRight, Star, ShoppingCart, Sparkles, ShieldCheck, Heart } from "lucide-react";
 import { motion } from "framer-motion";
 import { Products, ProductVariants, VariantSize} from "@/app/lib/types";
-import { fetchProducts, transformProducts } from "@/app/lib/data/products";
 import Image from "next/image";
 interface HeroProps {
   key?: React.Key;
   onShopClick: () => void;
   onQuickAdd: (variant_size: number) => void;
-  PRODUCTS: Products[];
-
+  PRODUCTS:Products[],
 }
 
-export default function Hero({ onShopClick, onQuickAdd, PRODUCTS}: HeroProps) {
-  const product = PRODUCTS.find((p) => p.slug === "air-force-1");
+export default function Hero({ PRODUCTS,onShopClick, onQuickAdd}: HeroProps) {
 
+  const product = PRODUCTS.find((p) => p.slug === "air-force-1"); 
+  
   const [selectedVariant, setSelectedVariant] = useState<ProductVariants | null>(product?.variants[0] ?? null);
   const [selectedVariantSize, setSelectedVariantSize] = useState<VariantSize | null>(null);
   const [isLiked, setIsLiked] = useState<boolean>(false);
-
+useEffect(() => {
+  if (product?.variants[0]) {
+    setSelectedVariant(product.variants[0]);
+  }
+}, [product]);
   const handleQuickAdd = () => {
     if(selectedVariant == null){alert("PLease select a color !!"); return;}
     if(selectedVariantSize == null){alert("PLease select a size !!"); return;}
@@ -91,6 +94,26 @@ export default function Hero({ onShopClick, onQuickAdd, PRODUCTS}: HeroProps) {
                 <span className="font-mono text-lg font-bold text-orange-500">450 EGP</span>
               </div>
 
+              {/* Interactive Colors */}
+              <div className="space-y-2">
+                <span className="text-xs font-medium text-slate-500">Color Variant</span>
+                <div className="flex items-center gap-3">
+                  {product?.variants.map((variant) => (
+                    <button
+                      key={variant.id}
+                      onClick={() => setSelectedVariant(variant)}
+                      className={`w-6 h-6 rounded-full ${variant.color.name == "black" ? "bg-slate-900" : "bg-slate-300"} ring-offset-2 transition-all duration-300 ${
+                        selectedVariant?.color.name === variant.color.name ? "ring-2 ring-orange-500 scale-110" : "opacity-80 hover:opacity-100"
+                      }`}
+                      title={variant.color.name}
+                    />
+                  ))}
+                  <span className="text-xs font-medium text-slate-600 capitalize ml-1">
+                    {product?.name}
+                  </span>
+                </div>
+              </div>
+
               {/* Size Select */}
               <div className="space-y-2">
                 <div className="flex justify-between text-xs">
@@ -115,25 +138,7 @@ export default function Hero({ onShopClick, onQuickAdd, PRODUCTS}: HeroProps) {
                 </div>
               </div>
 
-              {/* Interactive Colors */}
-              <div className="space-y-2">
-                <span className="text-xs font-medium text-slate-500">Color Variant</span>
-                <div className="flex items-center gap-3">
-                  {product?.variants.map((variant) => (
-                    <button
-                      key={variant.id}
-                      onClick={() => setSelectedVariant(variant)}
-                      className={`w-6 h-6 rounded-full ${variant.color.name == "black" ? "bg-slate-900" : "bg-slate-300"} ring-offset-2 transition-all duration-300 ${
-                        selectedVariant?.color.name === variant.color.name ? "ring-2 ring-orange-500 scale-110" : "opacity-80 hover:opacity-100"
-                      }`}
-                      title={variant.color.name}
-                    />
-                  ))}
-                  <span className="text-xs font-medium text-slate-600 capitalize ml-1">
-                    {product?.name}
-                  </span>
-                </div>
-              </div>
+
 
               {/* Dual CTA Buttons inside Configurator */}
               <div className="flex gap-3 pt-2">

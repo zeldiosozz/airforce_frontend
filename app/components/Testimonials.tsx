@@ -1,33 +1,38 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Star, ChevronLeft, ChevronRight, Quote, Sparkles } from "lucide-react";
 import { Testimonial } from "@/app/lib/types";
 import { motion, AnimatePresence } from "motion/react";
 import Image from "next/image";
+import { fetchTestimonials } from "../hooks/useTestimonials";
 
-interface TestimonialsProps {
-  TESTIMONIALS: Testimonial[];
-}
-
-export default function Testimonials({TESTIMONIALS}: TestimonialsProps) {
+export default function Testimonials() {
   const [activeIndex, setActiveIndex] = useState(0);
-
+  const [testimonials, setTestimonials] = useState<Testimonial[]>([{id:0,name:"",role:"",comment:"",rating:"0",avatar:""}]);
+  useEffect(()=>{
+        async function loadTestimonials(){
+            setTestimonials(await fetchTestimonials())
+        }
+        loadTestimonials()
+    },[])
   const handleNext = () => {
-    setActiveIndex((prev) => (prev + 1) % TESTIMONIALS.length);
+    setActiveIndex((prev) => (prev + 1) % testimonials.length);
   };
 
   const handlePrev = () => {
-    setActiveIndex((prev) => (prev - 1 + TESTIMONIALS.length) % TESTIMONIALS.length);
+    setActiveIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
   };
-
-  const current = TESTIMONIALS[activeIndex];
+  if(testimonials){
+    console.log("in testimonails.tsx testimonials is activated")
+  }
+  const current = testimonials[activeIndex];
   return (
     <section className="py-20 bg-slate-50 border-b border-slate-100">
       <div className="max-w-4xl mx-auto px-4 sm:px-6">
         <div className="text-center space-y-3 mb-12">
           <span className="text-xs font-bold text-orange-500 uppercase tracking-widest font-sans flex items-center justify-center gap-1.5">
             <Sparkles size={14} />
-            VERIFIED TESTIMONIALS
+            VERIFIED testimonials
           </span>
           <h2 className="font-display font-bold text-3xl sm:text-4xl text-slate-900 tracking-tight">
             Loved by Elite Athletes & Collectors
@@ -61,7 +66,7 @@ export default function Testimonials({TESTIMONIALS}: TestimonialsProps) {
                       key={i}
                       size={16}
                       className={
-                        i < Math.floor(current.rating)
+                        i < Math.floor(Number(current.rating))
                           ? "text-amber-400 fill-amber-400"
                           : "text-slate-200"
                       }
@@ -77,7 +82,7 @@ export default function Testimonials({TESTIMONIALS}: TestimonialsProps) {
                 {/* Profile Card */}
                 <div className="flex items-center gap-4 pt-4 border-t border-slate-100">
                   <Image
-                    src={current.avatar}
+                    src={`/api/image${current.avatar}`}
                     alt={current.name}
                     width={48}
                     height={48}
@@ -118,7 +123,7 @@ export default function Testimonials({TESTIMONIALS}: TestimonialsProps) {
 
         {/* Bullet Progress Indicators */}
         <div className="flex items-center justify-center gap-2 mt-6">
-          {TESTIMONIALS.map((_, idx) => (
+          {testimonials.map((_, idx) => (
             <button
               key={idx}
               onClick={() => setActiveIndex(idx)}

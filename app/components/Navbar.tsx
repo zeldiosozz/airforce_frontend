@@ -1,9 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { Search, ShoppingBag, Menu, X, ArrowRight, Sparkles } from "lucide-react";
-import { motion, AnimatePresence } from "motion/react";
-import { Product } from "@/app/lib/data/products";
-import Image from "next/image";
+import { Search, ShoppingBag, Menu, X, ArrowRight } from "lucide-react";
+import { motion, AnimatePresence } from "motion/react";import Image from "next/image";
 interface NavbarProps {
   cartItemsCount: number;
   onCartClick: () => void;

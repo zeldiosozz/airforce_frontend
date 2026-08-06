@@ -12,15 +12,10 @@ import Newsletter from "@/app/components/Newsletter";
 import Footer from "@/app/components/Footer";
 import BSsection from "@/app/bigcomponents/BSsection";
 // Data
-import { Products, Testimonial } from "@/app/lib/types";
 import useCart from "@/app/hooks/useCartt";
+import useProducts from "../hooks/useProducts";
 
-interface AppProps{
-  PRODUCTS: Products[],
-  TESTIMONIALS: Testimonial[],
-}
-
-export default function App({ PRODUCTS, TESTIMONIALS}: AppProps) {
+export default function App() {
   // Global React States
   const {
      cart,
@@ -32,8 +27,8 @@ export default function App({ PRODUCTS, TESTIMONIALS}: AppProps) {
      handleUpdateQuantity,
      updatingId,
     } = useCart();  
-
-  const [selectedProduct, setSelectedProduct] = useState<Products | null>(null);
+const {products} = useProducts();
+// const {testimonials} = useTestimonials();
   const [searchQuery, setSearchQuery] = useState("");
 
   // Scroll to anchor helpers
@@ -61,9 +56,9 @@ export default function App({ PRODUCTS, TESTIMONIALS}: AppProps) {
 
       {/* Hero Header Area */}
       <Hero 
-        PRODUCTS={PRODUCTS}
         onShopClick={() => scrollToSection("shop-section")}
         onQuickAdd={handleAddToCart}
+        PRODUCTS={products}
       />
 
       {/* Core Shopping Grid Section */}
@@ -88,7 +83,7 @@ export default function App({ PRODUCTS, TESTIMONIALS}: AppProps) {
       {/* Features Row / USP Banner */}
 
       {/* Athlete Testimonials Review Slider */}
-      <Testimonials TESTIMONIALS={TESTIMONIALS}/>
+      <Testimonials />
 
       {/* Newsletter signup Area */}
       <Newsletter />
