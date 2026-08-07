@@ -8,7 +8,7 @@ export const default_cart: Cart ={
             items:[]
         }
 export async function getCart(): Promise<Cart>{
-    const res = await fetch(`/api/cart`,
+    const res = await fetch("/api/cart",
         {
             method:"GET",
             credentials:"include"
@@ -16,7 +16,7 @@ export async function getCart(): Promise<Cart>{
     return await res.json();
 }
 export async function addToCart(variant_size:number):Promise<Cart>{
-    const res = await fetch(`/api/cart/items/add`,
+    const res = await fetch("/api/cart/items/add",
         {   
             method:"POST",
             credentials:"include",
@@ -28,7 +28,7 @@ export async function addToCart(variant_size:number):Promise<Cart>{
 }
 export async function updateCartItemAPI(variant_size:number, action:string):Promise<Cart>{
 
-    const res = await fetch(`/api/cart/items/quantity`,
+    const res = await fetch("/api/cart/items/quantity",
         {
             method:"POST",
             credentials:"include",
@@ -38,7 +38,7 @@ export async function updateCartItemAPI(variant_size:number, action:string):Prom
 }
 
 export async function removeCartItemAPI(variant_size:number):Promise<Cart>{
-    const res = await fetch(`/api/cart/items/remove`,
+    const res = await fetch("/api/cart/items/remove",
         {
             method:"POST",
             credentials:"include",
@@ -47,7 +47,7 @@ export async function removeCartItemAPI(variant_size:number):Promise<Cart>{
     return await res.json();
 }
 export async function clearCartAPI():Promise<Cart>{
-    const res = await fetch(`/api/cart/clear`,
+    const res = await fetch("/api/cart/clear",
         {
             method:"POST",
             credentials:"include",
