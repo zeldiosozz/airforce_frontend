@@ -19,9 +19,11 @@ export default function Hero({ PRODUCTS,onShopClick, onQuickAdd}: HeroProps) {
   const [selectedVariantSize, setSelectedVariantSize] = useState<VariantSize | null>(null);
   const [isLiked, setIsLiked] = useState<boolean>(false);
 useEffect(() => {
-  if (product?.variants[0]) {
+  if (!product?.variants?.length) return;
+
+  queueMicrotask(() => {
     setSelectedVariant(product.variants[0]);
-  }
+  });
 }, [product]);
   const handleQuickAdd = () => {
     if(selectedVariant == null){alert("PLease select a color !!"); return;}
