@@ -18,7 +18,7 @@ try{
     return NextResponse.json(CartSchema.parse(await res.json()), {status: res.status}); 
 
 }catch(error){
-    console.log("failed to remove cart items, ", error)
+    console.error("failed to remove cart items, ", error)
     return NextResponse.json(default_cart);
 }
 }

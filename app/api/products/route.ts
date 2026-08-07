@@ -8,6 +8,6 @@ if(!res.ok){
 return Response.json(await res.json());
 }catch(error){
   console.error("failed to retrieve data", error)
-  return [];
+  return Response.json([], {status:500});
 }
 }

@@ -1,10 +1,9 @@
 "use client";
 import React, { useState } from "react";
-import { X, Trash2, ShoppingBag, CreditCard, ArrowRight, CheckCircle2, ShieldAlert } from "lucide-react";
-import { Products, VariantSize } from "@/app/lib/types";
+import { X, Trash2, ShoppingBag, CreditCard, ArrowRight, CheckCircle2} from "lucide-react";
 import { createOrder } from "@/app/lib/data/orders";
 import { Cart } from "@/app/lib/types";
-import { motion, AnimatePresence } from "motion/react";
+import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 
 interface CartDrawerProps {
@@ -33,40 +32,12 @@ export default function CartDrawer({
   const [address, setAddress] = useState("")
   const [googleMapsLink, setgoogleMapsLink] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [mapsError, setMapsError] = useState("");  
 
-const isValidGoogleMapsLink = (value: string): boolean => {
-  const trimmed = value.trim();
-  
-  // تحقق من الصيغة العامة للرابط الأول
-  try {
-    const url = new URL(trimmed);
-    
-    // تحقق إن الدومين فعلاً بتاع جوجل ماب
-    const validDomains = [
-      "maps.google.com",
-      "www.google.com",
-      "goo.gl",
-      "maps.app.goo.gl",
-    ];
-    
-    return validDomains.some((domain) => url.hostname.includes(domain));
-  } catch {
-    return false;
-  }
-};
   if (!isOpen) return null;
-
-
 
 const handleCheckoutSubmit = async (e: React.FormEvent) => {
   e.preventDefault();
   setIsCheckingOut(true);
-   if (!isValidGoogleMapsLink(googleMapsLink)) {
-      setMapsError ("please enter valid google maps link .. for example: https://maps.app.goo.gl/...)");
-      return;
-    }
-    setMapsError(""); 
 
   try {
 
@@ -145,7 +116,7 @@ const handleCheckoutSubmit = async (e: React.FormEvent) => {
                   </div>
                   <h3 className="font-display font-bold text-xl text-slate-900">Order Placed Successfully!</h3>
                   <p className="text-sm text-slate-500 max-w-xs font-light">
-                    Your ShoeSpike premium sneakers are locked in. We've initiated express packing at our Kerala studio workshop.
+                    Your Airforce 1 are locked in. We&quot;ve initiated express packing at our workshop.
                   </p>
                   <div className="bg-slate-50 p-4 rounded-xl border border-slate-100 w-full text-xs text-left space-y-1 font-mono">
                     <div className="text-slate-400 uppercase text-[9px] font-bold">Shipping Info</div>

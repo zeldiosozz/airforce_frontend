@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { Star, ChevronLeft, ChevronRight, Quote, Sparkles } from "lucide-react";
 import { Testimonial } from "@/app/lib/types";
-import { motion, AnimatePresence } from "motion/react";
+import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { fetchTestimonials } from "../hooks/useTestimonials";
 
@@ -22,9 +22,6 @@ export default function Testimonials() {
   const handlePrev = () => {
     setActiveIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
   };
-  if(testimonials){
-    console.log("in testimonails.tsx testimonials is activated")
-  }
   const current = testimonials[activeIndex];
   return (
     <section className="py-20 bg-slate-50 border-b border-slate-100">
@@ -76,7 +73,7 @@ export default function Testimonials() {
 
                 {/* Comment */}
                 <p className="text-base sm:text-lg text-slate-700 italic font-sans font-light leading-relaxed">
-                  "{current.comment}"
+                  &quot;{current.comment}&quot;
                 </p>
 
                 {/* Profile Card */}

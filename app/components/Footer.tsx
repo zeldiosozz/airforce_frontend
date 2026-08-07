@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { Sparkles, Twitter, Instagram, Facebook, Youtube, Heart, MapPin, Phone, Mail } from "lucide-react";
+import { Instagram, Facebook, Heart, MapPin, Phone, Mail } from "lucide-react";
 import Image from "next/image"
 interface FooterProps {
   onShopClick: () => void;

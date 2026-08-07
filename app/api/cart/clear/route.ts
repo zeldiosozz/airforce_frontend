@@ -1,8 +1,8 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import {cookies} from 'next/headers'
 import { default_cart } from "@/app/hooks/useCartt";
 import { CartSchema } from "@/app/lib/types";
-export async function POST(request: NextRequest){
+export async function POST(){
 try{
         const res = await fetch(`${process.env.API_URL}/cart/delete/`, 
             {
@@ -16,6 +16,7 @@ try{
     return NextResponse.json(CartSchema.parse(await res.json()), {status: res.status}); 
 
 }catch(error){
+    console.error("failed to add items to cart, ", error)
     return NextResponse.json(default_cart,{status:500});
 }
 }

@@ -8,7 +8,7 @@ const res  = await fetch(`/api/testimonials`,{cache: 'no-store'})
 }
     return await res.json()
 }catch(error){
-  console.error("failed to retrieve data")
+  console.error("failed to retrieve data", error)
   return [];
 }
 }

@@ -5,19 +5,13 @@ export async function GET(
   { params }: { params: Promise<{ path: string[] }> }
 ) {
   const { path } = await params;
-
-  const backendUrl =
-    `${process.env.MEDIA_API_URL}/${path.join("/")}`;
-
-  const res = await fetch(backendUrl);
+  const res = await fetch(`${process.env.MEDIA_API_URL}/${path.join("/")}`);
 
   if (!res.ok) {
-  console.log(backendUrl)
     return Response.redirect(
       new URL("/images/itemplaceholder.jpg", request.url)
     );
   }
-  console.log(backendUrl)
   return new Response(res.body, {
     status: res.status,
     headers: {

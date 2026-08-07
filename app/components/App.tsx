@@ -1,6 +1,6 @@
 "use client";
 import React, { useState} from "react";
-import { AnimatePresence } from "motion/react";
+import { AnimatePresence } from "framer-motion";
 
 // Components
 import Navbar from "@/app/components/Navbar";

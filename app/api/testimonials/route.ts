@@ -6,7 +6,7 @@ const res  = await fetch(`${process.env.API_URL}/testimonials/`,{cache: 'no-stor
 }
     return Response.json(await res.json())
 }catch(error){
-  console.error("failed to retrieve data")
-  return [];
+  console.error("failed to retrieve data, ",error)
+  return Response.json([], {status:500});
 }
 }

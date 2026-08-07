@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { Mail, CheckCircle, Sparkles, ArrowRight } from "lucide-react";
-import { motion, AnimatePresence } from "motion/react";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function Newsletter() {
   const [email, setEmail] = useState("");

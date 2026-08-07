@@ -14,7 +14,7 @@ export async function POST(request: NextRequest){
         if(!res.ok) return NextResponse.json(await res.json(), {status:res.status})
             return NextResponse.json(await res.json(), {status:res.status}); 
         }catch(error){
-            console.log(error)
+            console.error("failed to checkout order from cart", error)
             return NextResponse.json({status:500});
         }
     

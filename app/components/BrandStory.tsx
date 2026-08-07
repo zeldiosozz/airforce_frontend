@@ -1,8 +1,7 @@
 "use client";
 import React from "react";
-import { Compass, Hammer, Sparkles, Feather, ShieldCheck } from "lucide-react";
-import { motion } from "motion/react";
-import Image from "next/image";
+import { Compass, Hammer, Sparkles, Feather} from "lucide-react";
+import { motion } from "framer-motion";
 export default function BrandStory() {
   const coreValues = [
     {

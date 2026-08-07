@@ -1,4 +1,4 @@
-import { Sparkles, SlidersHorizontal, ShoppingBag, Eye, HelpCircle } from "lucide-react";
+import { Sparkles } from "lucide-react";
 type Props = Record<"alignx" | "aligny" | "vid" | "sparkl" | "title" | "desc",
 string>;
 export default function Ssection({aligny, alignx, vid, sparkl, title, desc}:Props){

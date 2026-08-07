@@ -14,7 +14,7 @@ export async function GET(){
     const data = CartSchema.parse(await res.json());
     return NextResponse.json(await data);
 }catch(error){
-    console.log("failed to get cart items data, ", error)
+    console.error("failed to get cart items data, ", error)
     return NextResponse.json(default_cart, {status:500});
 }
 }
