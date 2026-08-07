@@ -173,7 +173,7 @@ const handleCheckoutSubmit = async (e: React.FormEvent) => {
                       <input
                         type="tel"
                         required
-                        placeholder="+20 00000 00000"
+                        placeholder="+201090012503"
                         value={phoneNumber}
                         onChange={(e) => setPhoneNumber(e.target.value)}
                         className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-orange-500 outline-none"
@@ -249,6 +249,7 @@ const handleCheckoutSubmit = async (e: React.FormEvent) => {
                           src={`/api/image${item.image}`}
                           alt={item.product_name}
                           fill
+                          sizes="(max-width: 768px) 50vw, (max-width: 1200px) 25vw, 20vw"
                           className={`w-full h-auto object-contain transform group-hover:scale-110 transition-transform ${
                             item.color === "#000000" || item.color === "#1F2937"
                               ? "grayscale contrast-125 brightness-75"
@@ -329,7 +330,7 @@ const handleCheckoutSubmit = async (e: React.FormEvent) => {
               <div className="space-y-1.5 text-sm font-sans">
                 <div className="flex justify-between text-slate-500">
                   <span>Bag Subtotal</span>
-                  <span className="font-mono">{Number(cart.total_price) - Number(cart.shipping_fee)}.LE</span>
+                  <span className="font-mono">{Number(cart.total_price)}.LE</span>
                 </div>
                 <div className="flex justify-between text-slate-500">
                   <span>Express Shipping</span>
@@ -339,7 +340,7 @@ const handleCheckoutSubmit = async (e: React.FormEvent) => {
                 </div>
                 <div className="flex justify-between text-slate-900 font-bold pt-1 border-t border-slate-100 text-base">
                   <span>Total Due</span>
-                  <span className="font-mono text-orange-500">{cart.total_price}.LE</span>
+                  <span className="font-mono text-orange-500">{Number(cart.total_price) + Number(cart.shipping_fee)}.LE</span>
                 </div>
               </div>
 

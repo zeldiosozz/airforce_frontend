@@ -92,8 +92,8 @@ useEffect(() => {
               className="bg-white rounded-2xl shadow-xl shadow-slate-100 border border-slate-100/80 max-w-md space-y-2 sm:space-y-4"
               style={{ padding: "clamp(0.75rem, 2.5vw, 1.5rem)" }}            >
               <div className="flex justify-between items-center">
-                <span className="font-display font-semibold text-slate-900">AirForce</span>
-                <span className="font-mono text-lg font-bold text-orange-500">450 EGP</span>
+                <span className="font-display font-semibold text-slate-900">{product?.name ?? "AIRFORCE 1"}</span>
+                <span className="font-mono text-lg font-bold text-orange-500">{product?.price ?? "450"}</span>
               </div>
 
               {/* Interactive Colors */}
@@ -216,6 +216,7 @@ useEffect(() => {
                       : ""
                   }`}
                   referrerPolicy="no-referrer"
+                  loading="eager"
                 />
               </div>
 
