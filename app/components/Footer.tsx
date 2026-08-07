@@ -153,7 +153,7 @@ export default function Footer({ onShopClick, onAboutClick, onContactClick }: Fo
               </li>
               <li className="flex gap-2.5 items-center">
                 <Phone size={14} className="text-orange-500 flex-shrink-0" />
-                <span>+20 000000000000</span>
+                <span>+20 1090012503</span>
               </li>
               <li className="flex gap-2.5 items-center">
                 <Mail size={14} className="text-orange-500 flex-shrink-0" />
