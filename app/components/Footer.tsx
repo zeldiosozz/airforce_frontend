@@ -45,6 +45,8 @@ export default function Footer({ onShopClick, onAboutClick, onContactClick }: Fo
                   <a
                     key={idx}
                     href={social.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="w-8 h-8 rounded-lg bg-slate-900 hover:bg-orange-500 hover:text-white text-slate-400 flex items-center justify-center transition-all"
                     title={social.title}
                   >

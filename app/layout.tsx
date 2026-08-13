@@ -13,8 +13,96 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "AIRFORCE",
-  description: "Powered By Airforce Brand",
+  metadataBase: new URL("https://airforcebrand.vercel.app"),
+
+  title: {
+    default: "AIRFORCE",
+    template: "%s | AIRFORCE",
+  },
+
+  description:
+    "AIRFORCE — Official website for Airforce brand.",
+
+  keywords: [
+    "AIRFORCE",
+    "AIRFORCE 1",
+    "AIRFORCE 1 shoes",
+    "AIRFORCE shoes",
+    "Air force",
+    "air force",
+    "air force 1",
+    "airforce 1",
+    "air force 1 shoes",
+    "airforce 1 shoes",
+    "air force shoes",
+    "airforce shoes",
+    "Airforce",
+    "Airforce Brand",
+    "Airforce Egypt",
+    "fashion",
+    "streetwear",
+    "clothing",
+    "fashion brand",
+    "streetwear brand",
+    "Egyptian fashion",
+    "Egypt fashion",
+    "modern clothing",
+    "premium clothing",
+    "ايرفورس",
+    "ايرفورس براند",
+    "كوتشي ايرفورس",
+    "كوتشي ايرفورس ستور",
+    "ايرفورس ستور",
+    "موقع ايرفورس",
+    "موقع ايرفورس ستور",
+    "كوتشيهات ايرفورس",
+    "كوتشي ايرفور وان",
+    "كوتشي ايرفور 1",
+  ],
+
+  authors: [
+    {
+      name: "AIRFORCE",
+    },
+  ],
+
+  creator: "AIRFORCE",
+  publisher: "AIRFORCE",
+
+  alternates: {
+    canonical: "https://airforcebrand.vercel.app",
+  },
+
+  openGraph: {
+    title: "AIRFORCE",
+    description:
+      "AIRFORCE — Official website for Airforce brand.",
+    url: "https://airforcebrand.vercel.app",
+    siteName: "AIRFORCE",
+    images: [
+      {
+        url: "/images/airforce_logo_b.jpg",
+        width: 1200,
+        height: 630,
+        alt: "AIRFORCE",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+
+  twitter: {
+    card: "summary_large_image",
+    title: "AIRFORCE",
+    description:
+      "AIRFORCE — Official website for Airforce brand.",
+    images: ["/images/airforce_logo_b.jpg"],
+  },
+
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({
