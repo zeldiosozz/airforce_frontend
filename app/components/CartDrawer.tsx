@@ -5,7 +5,7 @@ import { createOrder } from "@/app/lib/data/orders";
 import { Cart } from "@/app/lib/types";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-
+import { useTranslations } from "next-intl";
 interface CartDrawerProps {
   key?: React.Key;
   isOpen: boolean;
@@ -26,6 +26,7 @@ export default function CartDrawer({
   onClearCart,
   updatingId,
 }: CartDrawerProps) {
+  const t = useTranslations("CartDrawer");
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [fullName, setFullName] = useState("")
@@ -87,7 +88,7 @@ const handleCheckoutSubmit = async (e: React.FormEvent) => {
           <div className="px-6 py-5 border-b border-slate-100 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <ShoppingBag className="text-orange-500" size={20} />
-              <h2 className="font-display font-bold text-lg text-slate-900">Your Shopping Bag</h2>
+              <h2 className="font-display font-bold text-lg text-slate-900">{t("yourShoppingBag")}</h2>
               <span className="bg-slate-100 text-slate-600 font-mono text-xs font-semibold px-2 py-0.5 rounded-full">
                 {cart.total_items}
               </span>
@@ -114,17 +115,17 @@ const handleCheckoutSubmit = async (e: React.FormEvent) => {
                   <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-500 flex items-center justify-center mx-auto animate-bounce">
                     <CheckCircle2 size={36} />
                   </div>
-                  <h3 className="font-display font-bold text-xl text-slate-900">Order Placed Successfully!</h3>
+                  <h3 className="font-display font-bold text-xl text-slate-900">{t("orderPlacedSuccessfully")}</h3>
                   <p className="text-sm text-slate-500 max-w-xs font-light">
-                    Your Airforce 1 are locked in. We&quot;ve initiated express packing at our workshop.
+                   {t("orderSuccessMessage")}
                   </p>
                   <div className="bg-slate-50 p-4 rounded-xl border border-slate-100 w-full text-xs text-left space-y-1 font-mono">
-                    <div className="text-slate-400 uppercase text-[9px] font-bold">Shipping Info</div>
-                    <div className="text-slate-700 font-semibold truncate">Address: {address || "Express Delivery"}</div>
-                    <div className="text-slate-700 font-semibold">Contact: {phoneNumber || "Verified Customer"}</div>
-                    <div className="text-slate-700 font-semibold">Delivery Time: 48-72 Hours</div>
+                    <div className="text-slate-400 uppercase text-[9px] font-bold">{t("shippingInfo")}</div>
+                    <div className="text-slate-700 font-semibold truncate">{t("address")}: {address || t("expressDelivery")}</div>
+                    <div className="text-slate-700 font-semibold">{t("contact")}: {phoneNumber || t("verifiedCustomer")}</div>
+                    <div className="text-slate-700 font-semibold">{t("deliveryTime4872Hours")}</div>
                   </div>
-                  <span className="text-xs text-orange-500 animate-pulse font-medium">Auto-closing shopping bag...</span>
+                  <span className="text-xs text-orange-500 animate-pulse font-medium">{t("autoClosingShoppingBag")}</span>
                 </motion.div>
               ) : isCheckingOut ? (
                 /* Checkout details screen */
@@ -134,31 +135,31 @@ const handleCheckoutSubmit = async (e: React.FormEvent) => {
                   className="space-y-6 pt-4"
                 >
                   <h3 className="font-display font-semibold text-base text-slate-800 border-b pb-2">
-                    Shipping & Payment Details
+                    {t("shippingPaymentDetails")}
                   </h3>
                   <form onSubmit={handleCheckoutSubmit} className="space-y-4">
                     <div className="space-y-1">
-                      <label className="text-xs font-semibold text-slate-600 block">Name</label>
+                      <label className="text-xs font-semibold text-slate-600 block">{t("name")}</label>
                       <input
                         required
-                        placeholder="your name .. "
+                        placeholder={t("yourName")}
                         value={fullName}
                         onChange={(e) => setFullName(e.target.value)}
                         className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm focus:ring-2 focus:ring-orange-500 outline-none min-h-[5px]"
                       />
                     </div>
                     <div className="space-y-1">
-                      <label className="text-xs font-semibold text-slate-600 block">Deliver to Address</label>
+                      <label className="text-xs font-semibold text-slate-600 block">{t("deliverToAddress")}</label>
                       <textarea
                         required
-                        placeholder="House No, Road, City, Area, "
+                        placeholder={t("houseNoRoadCityArea")}
                         value={address}
                         onChange={(e) => setAddress(e.target.value)}
                         className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm focus:ring-2 focus:ring-orange-500 outline-none min-h-[80px]"
                       />
                     </div>
                     <div className="space-y-1">
-                      <label className="text-xs font-semibold text-slate-600 block">Google Maps Link Address</label>
+                      <label className="text-xs font-semibold text-slate-600 block">{t("googleMapsLinkAddress")}</label>
                       <textarea
                         required
                         placeholder=" "
@@ -169,7 +170,7 @@ const handleCheckoutSubmit = async (e: React.FormEvent) => {
                     </div>
 
                     <div className="space-y-1">
-                      <label className="text-xs font-semibold text-slate-600 block">Contact Phone Number</label>
+                      <label className="text-xs font-semibold text-slate-600 block">{t("contactPhoneNumber")}</label>
                       <input
                         type="tel"
                         required
@@ -181,10 +182,10 @@ const handleCheckoutSubmit = async (e: React.FormEvent) => {
                     </div>
 
                     <div className="bg-slate-50 p-4 rounded-xl space-y-2 border border-slate-100">
-                      <span className="text-[10px] uppercase font-bold text-slate-400 block tracking-wider">Payment Method</span>
+                      <span className="text-[10px] uppercase font-bold text-slate-400 block tracking-wider">{t("paymentMethod")}</span>
                       <div className="flex items-center gap-2.5 text-xs text-slate-700 font-medium">
                         <CreditCard size={16} className="text-orange-500" />
-                        <span>Cash on Delivery (COD)</span>
+                        <span>{t("cashOnDeliveryCod")}</span>
                       </div>
                     </div>
 
@@ -193,7 +194,7 @@ const handleCheckoutSubmit = async (e: React.FormEvent) => {
                       id="checkout-confirm-btn"
                       className="w-full bg-slate-900 hover:bg-orange-500 text-white py-3.5 px-4 rounded-xl font-display font-semibold flex items-center justify-center gap-2 shadow-lg hover:shadow-orange-500/20 hover:-translate-y-0.5 transition-all"
                     >
-                      <span>Complete Simulated Purchase — {cart.total_price}.LE</span>
+                      <span>{t("completeSimulatedPurchase")} — {cart.total_price}.LE</span>
                       <ArrowRight size={18} />
                     </button>
 
@@ -203,7 +204,7 @@ const handleCheckoutSubmit = async (e: React.FormEvent) => {
                       onClick={() => setIsCheckingOut(false)}
                       className="w-full bg-slate-100 hover:bg-slate-200 text-slate-600 py-2 rounded-xl text-xs font-semibold transition-colors"
                     >
-                      Back to Shopping Bag
+                      {t("backToShoppingBag")}
                     </button>
                   </form>
                 </motion.div>
@@ -218,9 +219,9 @@ const handleCheckoutSubmit = async (e: React.FormEvent) => {
                     <ShoppingBag size={24} />
                   </div>
                   <div>
-                    <h3 className="font-display font-semibold text-slate-900 text-sm">Your bag is empty</h3>
+                    <h3 className="font-display font-semibold text-slate-900 text-sm">{t("yourBagIsEmpty")}</h3>
                     <p className="text-xs text-slate-400 font-light mt-1 max-w-[200px]">
-                      Add premium sneakers from our collection to fill it up.
+                    {t("emptyBagMessage")}
                     </p>
                   </div>
                   <button
@@ -228,7 +229,7 @@ const handleCheckoutSubmit = async (e: React.FormEvent) => {
                     onClick={onClose}
                     className="bg-slate-900 hover:bg-orange-500 text-white px-5 py-2 rounded-lg text-xs font-semibold shadow-md transition-colors"
                   >
-                    Explore Shoes
+                    {t("exploreShoes")}
                   </button>
                 </motion.div>
               ) : (
@@ -272,15 +273,15 @@ const handleCheckoutSubmit = async (e: React.FormEvent) => {
                               id={`cart-remove-btn-${item.id}`}
                               onClick={() => onRemoveItem(item.id)}
                               className="text-slate-300 hover:text-red-500 p-1 rounded transition-colors"
-                              title="Delete Item"
+                              title={t("deleteItem")}
                             >
                               <Trash2 size={14} />
                             </button>
                           </div>
                           <div className="flex items-center gap-3 mt-1.5 text-[10px] font-semibold text-slate-500 font-mono">
-                            <span>US Size: {item.size}</span>
+                            <span>{t("usSize")}: {item.size}</span>
                             <span className="flex items-center gap-1">
-                              Color:
+                            {t("color")}:
                               <span
                                 className="w-2.5 h-2.5 rounded-full inline-block border border-slate-200"
                                 style={{ backgroundColor: item.color }}
@@ -329,17 +330,17 @@ const handleCheckoutSubmit = async (e: React.FormEvent) => {
               {/* Cost Calculations */}
               <div className="space-y-1.5 text-sm font-sans">
                 <div className="flex justify-between text-slate-500">
-                  <span>Bag Subtotal</span>
+<span>{t("bagSubtotal")}</span>
                   <span className="font-mono">{Number(cart.total_price)}.LE</span>
                 </div>
                 <div className="flex justify-between text-slate-500">
-                  <span>Express Shipping</span>
+<span>{t("expressShipping")}</span>
                   <span className="font-mono">
-                    {Number(cart.shipping_fee) === 0 ? <span className="text-emerald-500">Free</span> : `${cart.shipping_fee}.LE`}
+                    {Number(cart.shipping_fee) === 0 ? <span className="text-emerald-500">{t("free")}</span> : `${cart.shipping_fee}.LE`}
                   </span>
                 </div>
                 <div className="flex justify-between text-slate-900 font-bold pt-1 border-t border-slate-100 text-base">
-                  <span>Total Due</span>
+                  <span>{t("totalDue")}</span>
                   <span className="font-mono text-orange-500">{Number(cart.total_price) + Number(cart.shipping_fee)}.LE</span>
                 </div>
               </div>
@@ -351,7 +352,7 @@ const handleCheckoutSubmit = async (e: React.FormEvent) => {
                   onClick={() => setIsCheckingOut(true)}
                   className="w-full bg-slate-900 hover:bg-orange-500 text-white py-3.5 px-4 rounded-xl font-display font-semibold flex items-center justify-center gap-2 shadow-lg shadow-slate-900/10 hover:shadow-orange-500/20 hover:-translate-y-0.5 transition-all duration-300"
                 >
-                  Proceed to Checkout
+                  {t("proceedToCheckout")}
                   <ArrowRight size={18} />
                 </button>
               )}

@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Search, ShoppingBag, Menu, X, ArrowRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 interface NavbarProps {
   cartItemsCount: number;
   onCartClick: () => void;
@@ -22,6 +23,7 @@ export default function Navbar({
   searchQuery,
   setSearchQuery,
 }: NavbarProps) {
+  const t = useTranslations("Navbar")
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchExpanded, setIsSearchExpanded] = useState(false);
@@ -82,7 +84,7 @@ export default function Navbar({
                 window.scrollTo({ top: 0, behavior: "smooth" });
               }}
             >
-              Home
+              {t("home")}
             </a>
             <a
               href="#shop-section"
@@ -92,7 +94,7 @@ export default function Navbar({
                 onShopClick();
               }}
             >
-              Features
+              {t("features")}
             </a>
             <a
               href="#about-section"
@@ -102,7 +104,7 @@ export default function Navbar({
                 onAboutClick();
               }}
             >
-              Our Story
+              {t("ourStory")}
             </a>
             <a
               href="#newsletter-section"
@@ -112,7 +114,7 @@ export default function Navbar({
                 onContactClick();
               }}
             >
-              Newsletter
+              {t("newsletter")}
             </a>
           </nav>
 
@@ -141,7 +143,7 @@ export default function Navbar({
               onClick={onShopClick}
               className="bg-slate-900 hover:bg-orange-500 text-white font-display text-sm font-semibold px-5 py-2.5 rounded-xl flex items-center gap-1.5 shadow-md shadow-slate-900/10 hover:shadow-orange-500/20 hover:-translate-y-0.5 transition-all duration-300"
             >
-              Shop Now
+              {t("shopNow")}
               <ArrowRight size={16} />
             </button>
           </div>
@@ -225,7 +227,7 @@ export default function Navbar({
                   onShopClick();
                 }}
               >
-                Shop Sneakers
+                {t("shopSneakers")}
               </a>
               <a
                 href="#about-section"
@@ -235,7 +237,7 @@ export default function Navbar({
                   onAboutClick();
                 }}
               >
-                Our Story
+                {t("ourStory")}
               </a>
               <a
                 href="#newsletter-section"
@@ -245,7 +247,7 @@ export default function Navbar({
                   onContactClick();
                 }}
               >
-                Newsletter
+                {t("newsletter")}
               </a>
               <div className="pt-4 border-t border-slate-100 px-3">
                 <button
@@ -256,7 +258,7 @@ export default function Navbar({
                   }}
                   className="w-full bg-slate-900 hover:bg-orange-500 text-white py-3 px-4 rounded-xl font-display font-semibold flex items-center justify-center gap-2 shadow-md transition-colors"
                 >
-                  Shop Collection
+                  {t("shopCollection")}
                   <ArrowRight size={18} />
                 </button>
               </div>

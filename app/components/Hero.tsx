@@ -4,6 +4,7 @@ import { ArrowRight, Star, ShoppingCart, Sparkles, ShieldCheck, Heart } from "lu
 import { motion } from "framer-motion";
 import { Products, ProductVariants, VariantSize} from "@/app/lib/types";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 interface HeroProps {
   key?: React.Key;
   onShopClick: () => void;
@@ -12,7 +13,7 @@ interface HeroProps {
 }
 
 export default function Hero({ PRODUCTS,onShopClick, onQuickAdd}: HeroProps) {
-
+  const t = useTranslations("Hero");
   const product = PRODUCTS.find((p) => p.slug === "air-force-1"); 
   
   const [selectedVariant, setSelectedVariant] = useState<ProductVariants | null>(product?.variants[0] ?? null);
@@ -54,7 +55,7 @@ useEffect(() => {
               className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-orange-100 text-orange-600 text-xs font-semibold uppercase tracking-wider"
             >
               <Sparkles size={14} className="animate-spin" />
-              Revolutionary Airforce Sneaker Craft
+            {t("revolutionaryAirforceSneakerCraft")}
             </motion.div>
 
             {/* Headline */}
@@ -65,9 +66,9 @@ useEffect(() => {
                 transition={{ duration: 0.6, delay: 0.1 }}
                 className="font-display font-bold text-slate-900 leading-[1.1] tracking-tight"
                 style={{ fontSize: "clamp(1.5rem, 5vw, 3.75rem)" }}>
-                Step Into<br />
+                {t("StepInto")}<br />
                 <span className="text-orange-500 relative">
-                  Forcing Style
+                  {t("ForcingStyle")}
                   <span className="absolute left-0 bottom-1 w-full h-2 bg-orange-200/50 -z-10" />
                 </span>{" "}
                 ..
@@ -78,9 +79,8 @@ useEffect(() => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.2 }}
                 className="text-slate-600 max-w-xl font-sans font-light leading-relaxed"
-                style={{ fontSize: "clamp(0.7rem, 1.8vw, 1.125rem)" }}              >
-                Engineered for maximum velocity, styled for urban aesthetics. Inspired by minimalist design
-                with an energetic burst of high-performance sole plate technology. Handcrafted comfort with premium materials.
+                style={{ fontSize: "clamp(0.7rem, 1.8vw, 1.125rem)" }} >
+              {t("heroDescription")}
               </motion.p>
             </div>
 
@@ -98,7 +98,7 @@ useEffect(() => {
 
               {/* Interactive Colors */}
               <div className="space-y-2">
-                <span className="text-xs font-medium text-slate-500">Color Variant</span>
+                <span className="text-xs font-medium text-slate-500">{t("colorVariant")}</span>
                 <div className="flex items-center gap-3">
                   {product?.variants.map((variant) => (
                     <button
@@ -120,7 +120,7 @@ useEffect(() => {
               <div className="space-y-2">
                 <div className="flex justify-between text-xs">
                   <span className="font-medium text-slate-500">Select Size</span>
-                  <span className="text-slate-400">Fits true to size</span>
+                  <span className="text-slate-400">{t("fitsTrueToSize")}</span>
                 </div>
                 <div className="flex gap-2 flex-wrap">
                   {selectedVariant?.sizes.map((size) => (
@@ -150,13 +150,13 @@ useEffect(() => {
                   className="flex-1 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-xl py-3 px-4 flex items-center justify-center gap-2 shadow-lg shadow-orange-500/20 hover:-translate-y-0.5 transition-all duration-200"
                 >
                   <ShoppingCart size={18} />
-                  Add to Cart
+                {t("addToCart")}
                 </button>
                 <button
                   id="hero-view-details-btn"
                   onClick={onShopClick}
                   className="bg-slate-100 hover:bg-slate-200 text-slate-800 font-semibold rounded-xl px-4 flex items-center justify-center transition-colors"
-                  title="Explore all"
+                  title={t("exploreAll")}
                 >
                   <ArrowRight size={18} />
                 </button>
@@ -172,11 +172,11 @@ useEffect(() => {
             >
               <div className="flex items-center gap-1.5">
                 <ShieldCheck className="text-emerald-500 w-4 h-4" />
-                <span>100% Authentic Guarantee</span>
+<span>{t("100AuthenticGuarantee")}</span>
               </div>
               <div className="flex items-center gap-1.5">
                 <Star className="text-amber-400 fill-amber-400 w-4 h-4" />
-                <span>4.9 Star Verified Reviews</span>
+<span>{t("49StarVerifiedReviews")}</span>
               </div>
             </motion.div>
           </div>
@@ -243,8 +243,8 @@ useEffect(() => {
                 <div className="w-6 h-6 sm:w-10 sm:h-10 rounded-full bg-emerald-50 text-emerald-500 flex items-center justify-center font-bold font-sans text-[10px] sm:text-xs">                  4.9
                 </div>
                 <div>
-                  <div className="text-[8px] sm:text-[10px] text-slate-400 uppercase font-semibold font-sans">User Rating</div>
-                  <div className="text-[10px] sm:text-xs font-bold text-slate-900 font-sans">Superb Comfort</div>
+                  <div className="text-[8px] sm:text-[10px] text-slate-400 uppercase font-semibold font-sans"> {t("userRating")}</div>
+                  <div className="text-[10px] sm:text-xs font-bold text-slate-900 font-sans">{t("superbComfort")}</div>
                 </div>
               </motion.div>
 
@@ -255,8 +255,8 @@ useEffect(() => {
                 className="absolute top-1/3 -left-2 sm:-left-8 bg-white/95 backdrop-blur-sm px-2 py-1.5 sm:px-4 sm:py-3 rounded-xl sm:rounded-2xl shadow-xl border border-slate-100 flex items-center gap-1.5 sm:gap-3 z-10"              >
                 <div className="w-6 h-6 sm:w-9 sm:h-9 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center font-bold text-xs sm:text-base">⚡</div>
                 <div>
-                  <div className="text-[8px] sm:text-[10px] text-slate-400 uppercase font-semibold font-sans">Tech Spec</div>
-                  <div className="text-[10px] sm:text-xs font-bold text-slate-900 font-sans">Carbon Spring</div>
+                  <div className="text-[8px] sm:text-[10px] text-slate-400 uppercase font-semibold font-sans"> {t("techSpec")}</div>
+                  <div className="text-[10px] sm:text-xs font-bold text-slate-900 font-sans">{t("carbonSpring")}</div>
                 </div>
               </motion.div>
             </motion.div>

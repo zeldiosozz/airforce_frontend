@@ -1,0 +1,142 @@
+{
+"Navbar": {
+  "home": "الرئيسية",
+  "features": "المميزات",
+  "ourStory": "قصتنا",
+  "newsletter": "النشرة البريدية",
+  "shopNow": "تسوق الآن",
+  "shopSneakers": "تصفح الأحذية",
+  "shopCollection": "تصفح المجموعة",
+  "searchPremiumSneakers": "ابحث عن أفضل الأحذية...",
+  "viewShoppingCart": "عرض سلة التسوق"
+},
+  "Hero": {
+    "StepInto":"انطلق نحو",
+    "ForcingStyle":"أناقة لا تقارن",
+    "colorVariant": "اللون المتاح",
+    "selectSize": "اختر المقاس",
+    "fitsTrueToSize": "المقاس مطابق للحجم",
+    "100AuthenticGuarantee": "ضمان أصالة 100%",
+    "49StarVerifiedReviews": "4.9 تقييمات موثقة",
+    "userRating": "تقييم المستخدمين",
+    "superbComfort": "راحة فائقة",
+    "techSpec": "المواصفات التقنية",
+    "carbonSpring": "زنبرك كربوني",
+    "exploreAll": "استكشف الكل",
+    "revolutionaryAirforceSneakerCraft": "صناعة حذاء إيرفورس الثورية",
+    "heroDescription": "مصمم لأقصى سرعة، ومصمم بأسلوب حضري عصري. مستوحى من التصميم البسيط مع تقنية نعل عالية الأداء تمنحك دفعة قوية. راحة مصنوعة يدويًا باستخدام خامات عالية الجودة.",
+    "addToCart": "أضف إلى السلة"
+  },
+  
+  "CartDrawer": {
+    "yourShoppingBag": "سلة التسوق",
+    "orderPlacedSuccessfully": "تم تأكيد الطلب بنجاح!",
+    "orderSuccessMessage": "تم تأكيد طلب Airforce 1 الخاص بك. بدأنا الآن تجهيز طلبك وتجهيزه للشحن السريع من الورشة.",
+    "shippingInfo": "معلومات الشحن",
+    "address": "العنوان",
+    "expressDelivery": "توصيل سريع",
+    "contact": "رقم التواصل",
+    "verifiedCustomer": "عميل موثق",
+    "deliveryTime4872Hours": "وقت التوصيل: 48-72 ساعة",
+    "autoClosingShoppingBag": "سيتم إغلاق سلة التسوق تلقائيًا...",
+    "shippingPaymentDetails": "بيانات الشحن والدفع",
+    "name": "الاسم",
+    "yourName": "اكتب اسمك ..",
+    "deliverToAddress": "عنوان التوصيل",
+    "houseNoRoadCityArea": "رقم المنزل، الشارع، المدينة، المنطقة،",
+    "googleMapsLinkAddress": "رابط موقعك على خرائط Google",
+    "contactPhoneNumber": "رقم الهاتف",
+    "paymentMethod": "طريقة الدفع",
+    "cashOnDeliveryCod": "الدفع عند الاستلام",
+    "completeSimulatedPurchase": "تأكيد الطلب",
+    "backToShoppingBag": "العودة إلى سلة التسوق",
+    "yourBagIsEmpty": "سلة التسوق فارغة",
+    "emptyBagMessage": "أضف أحذية مميزة من مجموعتنا إلى سلة التسوق.",
+    "exploreShoes": "استكشف الأحذية",
+    "deleteItem": "حذف المنتج",
+    "bagSubtotal": "إجمالي المنتجات",
+    "expressShipping": "الشحن السريع",
+    "free": "مجاني",
+    "totalDue": "الإجمالي المستحق",
+    "proceedToCheckout": "الانتقال للدفع",
+    "usSize": "المقاس",
+    "color": "اللون"
+  },
+ "BrandStory": {
+    "airforceWorkshopStudio": "استوديو ورشة إيرفورس",
+    "whereScienceMeetsFootwearCraftsmanship": "حيث يلتقي العلم بحرفية صناعة الأحذية",
+    "handDraftedDesigns": "تصاميم مرسومة يدويًا",
+
+    "airforceHeritage": "إرث إيرفورس",
+
+    "craftingFuture": "نصنع مستقبل أسلوب الأحذية البسيط",
+
+    "heritageDescription": "من المواد المختارة بعناية إلى الخياطة الدقيقة، تم تصميم كل تفصيلة بعناية وهدف. يتم تجميع كل جزء باحترافية لصنع التصميم النظيف والخالد الذي يميز Air Force 1.",
+
+    "weightlessComfort": "راحة خفيفة كأنها بلا وزن",
+    "weightlessComfortDesc": "من خلال الجمع بين ألواح ألياف الكربون سريعة الاستجابة والشبكات البوليمرية فائقة الخفة، نصنع أحذية تشعرك وكأنها امتداد طبيعي لخطوتك.",
+
+    "artisanalCraftsmanship": "حرفية يدوية متقنة",
+    "artisanalCraftsmanshipDesc": "يتم اختيار كل خامة بعناية فائقة لضمان الجودة والمتانة والتشطيب المميز، حتى يرقى كل زوج إلى أعلى معايير الجودة.",
+
+    "sustainableDirection": "توجه مستدام",
+    "sustainableDirectionDesc": "كل خطوة إلى الأمام يقودها التزامنا بصناعة منتجات تجمع بين الجودة طويلة الأمد والتصميم المسؤول."
+  },
+  "Newsletter": {
+    "innerCircle": "الدائرة الداخلية لـ SPIKE",
+    "title": "احصل على خصم 15% على طلبك الأول",
+    "description": "انضم إلى النشرة البريدية لـايرفورس لتحصل على وصول مبكر لإصدارات المنتجات، وأدلة التدريب المميزة، وقسائم الخصم الخاصة.",
+    "welcomeToTheClub": "مرحبًا بك في النادي!",
+    "successMessage": "تحقق من بريدك الإلكتروني للحصول على كود الخصم بنسبة 15% وتفاصيل الوصول المبكر.",
+    "subscribeAnotherEmail": "الاشتراك ببريد إلكتروني آخر",
+    "emailPlaceholder": "أدخل بريدك الإلكتروني المميز",
+    "subscribe": "اشترك",
+    "invalidEmail": "يرجى إدخال بريد إلكتروني صالح.",
+    "privacy": "نحترم خصوصيتك. يمكنك إلغاء الاشتراك في أي وقت. لا رسائل مزعجة، نضمن لك ذلك."
+  },
+  
+  "Testimonials": {
+    "verifiedTestimonials": "آراء العملاء الموثقة",
+    "lovedByEliteAthletesAndCollectors": "محبوب من نخبة الرياضيين وهواة اقتناء الأحذية",
+    "readStoriesFromRunnersCoachesAndSneakerCollectors": "اقرأ تجارب العدّائين والمدربين وهواة جمع الأحذية الذين اختبروا الفرق مع ايرفورس",
+    "previousReview": "التقييم السابق",
+    "nextReview": "التقييم التالي",
+    "goToSlide": "الانتقال إلى الشريحة"
+  },
+   "BSsection": {
+    "everyStepAStatement": "كل خطوة، لها حضور.",
+    "iconicInEveryFrame": "أيقونة في كل لقطة",
+    "iconicInEveryFrameDesc": "اكتشف الجاذبية الخالدة لحذاء Air Force 1 من خلال مجموعة مختارة بعناية من الصور المرئية. كل زاوية تبرز تصميمه الأسطوري، وحرفيته الفاخرة، وتعدد استخداماته بسهولة، لتُظهر التفاصيل التي جعلت منه أيقونة راسخة في عالم الأحذية الرياضية.",
+
+    "engineeredForEverydayExcellence": "مصمم للتميز في كل يوم.",
+    "aLegacyCaptured": "إرث في كل لقطة",
+    "aLegacyCapturedDesc": "عِش تجربة Air Force 1 من خلال رحلة بصرية تحتفي في كل لقطة بالحرفية والتصميم الخالد والأناقة المستمرة. مجموعة تعكس جوهر هذه الأيقونة، تفصيلاً بعد تفصيل.",
+
+    "everyStepAStatementSecond": "كل خطوة، لها حضور",
+    "iconicInEveryFrameSecond": "أيقونة في كل لقطة",
+    "iconicInEveryFrameSecondDesc": "أكثر من مجرد حذاء رياضي، فإن Air Force 1 هو رمز للأناقة التي لا تزول. تبرز هذه المجموعة تفاصيله المتقنة، وشخصيته الجريئة، والحرفية التي تقف وراء أحد أكثر التصاميم شهرة وتميزًا في العالم."
+  },
+    "WhatsAppPopUp": {
+    "chatWithUsOnWhatsapp": "تواصل معنا ;)"
+    },
+    "Footer": {
+  "brandDescription": "استوديوهات أحذية فاخرة بتصميم مستوحى من Airforce. نمزج بين علم الحركة الرياضية وتقنيات ألواح ألياف الكربون المتقدمة لصناعة أحذية توفر راحة استثنائية وارتدادًا حركيًا مميزًا.",
+  "quickNav": "التنقل السريع",
+  "homeMain": "الرئيسية",
+  "shopSneakers": "تسوق الأحذية",
+  "ourHeritage": "قصتنا",
+  "newsletterClub": "النشرة البريدية",
+  "customerSupport": "دعم العملاء",
+  "sizeGuideFitting": "دليل المقاسات والملاءمة",
+  "trackDeliveryStatus": "تتبع حالة التوصيل",
+  "returnTrialPolicy": "سياسة الاسترجاع والتجربة",
+  "verifiedReviews": "التقييمات الموثقة (4.9★)",
+  "airforceStudios": "استوديوهات Airforce",
+  "address": "AirForce Labs، مارين درايف، كوتشي، Airforce، الرمز البريدي 682031",
+  "phone": "+20 1090012503",
+  "email": "email@AirForce.com",
+  "copyright": "© {year} AirForce Footwear Private Ltd. جميع الحقوق محفوظة.",
+  "handcraftedWith": "صُنع بحب",
+  "inAirforceEgypt": "في Airforce، مصر."
+}
+}
