@@ -55,11 +55,11 @@ export default function LanguageSwitcher() {
       "
     >
       <span className="text-[10px] opacity-50">
-        {locale === "ar" ? "AR" : "EN"}
+        {locale === "ar" ? "EN" : "AR"}
       </span>
 
       <span className="text-[10px] font-bold">
-        {locale === "ar" ? "EN" : "AR"}
+        {locale === "ar" ? "AR" : "EN"}
       </span>
     </button>
   );
