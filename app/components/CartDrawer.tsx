@@ -1,6 +1,16 @@
 "use client";
 import React, { useState } from "react";
-import { X, Trash2, ShoppingBag, CreditCard, ArrowRight, CheckCircle2} from "lucide-react";
+import {
+  X,
+  Trash2,
+  ShoppingBag,
+  CreditCard,
+  ArrowRight,
+  CheckCircle2,
+  MapPin,
+  CircleX,
+  Loader2,
+} from "lucide-react";
 import { createOrder } from "@/app/lib/data/orders";
 import { Cart } from "@/app/lib/types";
 import { motion, AnimatePresence } from "framer-motion";
@@ -32,9 +42,42 @@ export default function CartDrawer({
   const [fullName, setFullName] = useState("")
   const [address, setAddress] = useState("")
   const [googleMapsLink, setgoogleMapsLink] = useState("");
+  const [locationStatus, setLocationStatus] = useState<
+  "idle" | "loading" | "success" | "error"
+  >("idle");
   const [phoneNumber, setPhoneNumber] = useState("");
 
   if (!isOpen) return null;
+
+  const handleGetLocation = () => {
+  if (!navigator.geolocation) {
+    setLocationStatus("error");
+    return;
+  }
+
+  setLocationStatus("loading");
+
+  navigator.geolocation.getCurrentPosition(
+    (position) => {
+      const { latitude, longitude } = position.coords;
+
+      const mapsUrl = `https://www.google.com/maps?q=${latitude},${longitude}`;
+
+      setgoogleMapsLink(mapsUrl);
+      setLocationStatus("success");
+    },
+    (error) => {
+      console.error("Location error:", error);
+      setLocationStatus("error");
+      setgoogleMapsLink("");
+    },
+    {
+      enableHighAccuracy: true,
+      timeout: 10000,
+      maximumAge: 0,
+    }
+  );
+};
 
 const handleCheckoutSubmit = async (e: React.FormEvent) => {
   e.preventDefault();
@@ -158,15 +201,82 @@ const handleCheckoutSubmit = async (e: React.FormEvent) => {
                         className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm focus:ring-2 focus:ring-orange-500 outline-none min-h-[80px]"
                       />
                     </div>
-                    <div className="space-y-1">
-                      <label className="text-xs font-semibold text-slate-600 block">{t("googleMapsLinkAddress")}</label>
-                      <textarea
-                        required
-                        placeholder=" "
-                        value={googleMapsLink}
-                        onChange={(e) => setgoogleMapsLink(e.target.value)}
-                        className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm focus:ring-2 focus:ring-orange-500 outline-none min-h-[80px]"
-                      />
+<div className="space-y-2">
+  <label className="text-xs font-semibold text-slate-600 block">
+    {t("googleMapsLinkAddress")}
+  </label>
+
+  <div className="relative">
+    <textarea
+      required
+      readOnly
+      value={googleMapsLink}
+      placeholder={t("locationNotSelected")}
+      className={`w-full bg-slate-50 border rounded-xl p-3 pr-10 text-xs font-mono outline-none min-h-[80px] resize-none transition-all ${
+        locationStatus === "success"
+          ? "border-emerald-300 bg-emerald-50/40 text-emerald-700"
+          : locationStatus === "error"
+          ? "border-red-300 bg-red-50/40"
+          : "border-slate-200"
+      }`}
+    />
+
+    {/* Status Icon */}
+    {locationStatus === "success" && (
+      <CheckCircle2
+        size={18}
+        className="absolute right-3 top-3 text-emerald-500"
+      />
+    )}
+
+    {locationStatus === "error" && (
+      <CircleX
+        size={18}
+        className="absolute right-3 top-3 text-red-500"
+      />
+      )}
+                    </div>
+                      
+                      <button
+                        type="button"
+                        onClick={handleGetLocation}
+                        disabled={locationStatus === "loading"}
+                        className={`w-full py-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 transition-all ${
+                          locationStatus === "success"
+                            ? "bg-emerald-500 hover:bg-emerald-600 text-white"
+                            : locationStatus === "error"
+                            ? "bg-red-500 hover:bg-red-600 text-white"
+                            : "bg-slate-900 hover:bg-orange-500 text-white"
+                        }`}
+                      >
+                        {locationStatus === "loading" ? (
+                          <>
+                            <Loader2 size={16} className="animate-spin" />
+                            {t("detectingLocation")}
+                          </>
+                        ) : locationStatus === "success" ? (
+                          <>
+                            <CheckCircle2 size={16} />
+                            {t("locationDetected")}
+                          </>
+                        ) : locationStatus === "error" ? (
+                          <>
+                            <CircleX size={16} />
+                            {t("tryLocationAgain")}
+                          </>
+                        ) : (
+                          <>
+                            <MapPin size={16} />
+                            {t("useMyLocation")}
+                          </>
+                        )}
+                      </button>
+                      
+                      {locationStatus === "error" && (
+                        <p className="text-[10px] text-red-500">
+                          {t("locationPermissionError")}
+                        </p>
+                      )}
                     </div>
 
                     <div className="space-y-1">
@@ -174,7 +284,7 @@ const handleCheckoutSubmit = async (e: React.FormEvent) => {
                       <input
                         type="tel"
                         required
-                        placeholder="+201090012503"
+                        placeholder="+201012345678"
                         value={phoneNumber}
                         onChange={(e) => setPhoneNumber(e.target.value)}
                         className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-orange-500 outline-none"
@@ -194,7 +304,8 @@ const handleCheckoutSubmit = async (e: React.FormEvent) => {
                       id="checkout-confirm-btn"
                       className="w-full bg-slate-900 hover:bg-orange-500 text-white py-3.5 px-4 rounded-xl font-display font-semibold flex items-center justify-center gap-2 shadow-lg hover:shadow-orange-500/20 hover:-translate-y-0.5 transition-all"
                     >
-                      <span>{t("completeSimulatedPurchase")} — {cart.total_price + Number(cart.shipping_fee)}.LE</span>
+                      <span>{t("completeSimulatedPurchase")}</span>
+                      <span>- {Number(cart.total_price) + Number(cart.shipping_fee)}.LE</span>
                       <ArrowRight size={18} />
                     </button>
 
