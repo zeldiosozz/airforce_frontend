@@ -194,7 +194,7 @@ const handleCheckoutSubmit = async (e: React.FormEvent) => {
                       id="checkout-confirm-btn"
                       className="w-full bg-slate-900 hover:bg-orange-500 text-white py-3.5 px-4 rounded-xl font-display font-semibold flex items-center justify-center gap-2 shadow-lg hover:shadow-orange-500/20 hover:-translate-y-0.5 transition-all"
                     >
-                      <span>{t("completeSimulatedPurchase")} — {cart.total_price}.LE</span>
+                      <span>{t("completeSimulatedPurchase")} — {cart.total_price + Number(cart.shipping_fee)}.LE</span>
                       <ArrowRight size={18} />
                     </button>
 
