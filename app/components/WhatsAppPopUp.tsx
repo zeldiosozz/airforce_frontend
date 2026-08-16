@@ -1,7 +1,7 @@
 "use client";
 
 export default function WhatsAppButton() {
-  const phoneNumber = "20 1090012503";
+  const phoneNumber = "+201090012503";
 
   const message = encodeURIComponent(
     "عايز اعرف تفاصيل اكتر"
