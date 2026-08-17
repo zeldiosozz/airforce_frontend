@@ -12,7 +12,7 @@ import Newsletter from "@/app/components/Newsletter";
 import Footer from "@/app/components/Footer";
 import BSsection from "@/app/bigcomponents/BSsection";
 // Data
-import useCart from "@/app/hooks/useCartt";
+import { useCartContext } from "@/app/context/CartContext";
 import useProducts from "../hooks/useProducts";
 
 export default function App() {
@@ -26,7 +26,7 @@ export default function App() {
      handleRemoveItem, 
      handleUpdateQuantity,
      updatingId,
-    } = useCart();  
+    } = useCartContext();  
 const {products} = useProducts();
 // const {testimonials} = useTestimonials();
   const [searchQuery, setSearchQuery] = useState("");

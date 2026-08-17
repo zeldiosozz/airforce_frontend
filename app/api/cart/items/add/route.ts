@@ -3,12 +3,15 @@ import { CartSchema } from "@/app/lib/types";
 import { NextRequest, NextResponse } from "next/server";
 import {cookies} from "next/headers"
 export async function POST(request: NextRequest){
+    const cookieStore = await cookies()
+const sessionCookie = cookieStore.get("sessionid");
+
         try{
         const res = await fetch(`${process.env.API_URL}/cart/items/add/`, {
             method: "POST",
             headers: {
                 "Content-Type":"application/json",
-                Cookie: (await cookies()).toString()
+                Cookie: sessionCookie ? `sessionid=${sessionCookie.value}` : '',
 
             },
             body: await request.text()
